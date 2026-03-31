@@ -1,4 +1,20 @@
 /* ───────────────────────────────
+   Custom Properties
+   ─────────────────────────────── */
+:root {
+  --color-white: #FFFFFF;
+  --color-bone: #F9F7F2;
+  --color-black: #000000;
+  --color-gold: #C5A059;
+  --color-border: #E5E5E5;
+  --color-text: #1a1a1a;
+  --color-text-muted: #777;
+  --font-display: 'Cormorant Garamond', 'Georgia', serif;
+  --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+  --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ───────────────────────────────
    CSS Reset
    ─────────────────────────────── */
 *,
@@ -16,10 +32,12 @@ html {
 }
 
 body {
-  font-family: 'Georgia', 'Times New Roman', serif;
-  background-color: #faf8f5;
-  color: #1a1a1a;
-  line-height: 1.7;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  background-color: var(--color-white);
+  color: var(--color-text);
+  line-height: 1.75;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -53,46 +71,57 @@ button {
    Typography
    ─────────────────────────────── */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: var(--font-display);
+  line-height: 1.15;
+  color: var(--color-black);
+}
+
+h1, h2 {
+  font-weight: 300;
+  font-style: italic;
+}
+
+h3, h4, h5, h6 {
   font-weight: 400;
-  line-height: 1.2;
-  letter-spacing: 0.04em;
-  color: #111;
+  letter-spacing: 0.03em;
 }
 
 h1 {
-  font-size: clamp(2.4rem, 5vw, 4.5rem);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  letter-spacing: 0.02em;
 }
 
 h2 {
-  font-size: clamp(1.5rem, 3vw, 2.4rem);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  letter-spacing: 0.02em;
   margin-bottom: 1.5rem;
 }
 
 h3 {
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  letter-spacing: 0.05em;
+  font-family: var(--font-body);
+  font-size: clamp(0.8rem, 1vw, 0.9rem);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 400;
 }
 
 p {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
-  line-height: 1.8;
-  color: #333;
-  max-width: 60ch;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.75;
+  letter-spacing: -0.01em;
+  color: #555;
+  max-width: 55ch;
 }
 
 small,
 .caption {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #888;
+  color: var(--color-text-muted);
+  font-weight: 400;
 }
 
 /* ───────────────────────────────
@@ -100,17 +129,17 @@ small,
    ─────────────────────────────── */
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 .section {
-  padding: 5rem 0;
+  padding: 6rem 0;
 }
 
 .section--hero {
-  padding: 8rem 0 6rem;
+  padding: 10rem 0 5rem;
   text-align: center;
 }
 
@@ -123,46 +152,60 @@ small,
    ─────────────────────────────── */
 .btn {
   display: inline-block;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  padding: 1rem 2.5rem;
-  border: 1px solid #1a1a1a;
-  color: #1a1a1a;
+  padding: 1rem 2.8rem;
+  border: 1px solid var(--color-black);
+  color: var(--color-black);
   background: transparent;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: all 0.4s var(--ease-luxury);
+  cursor: pointer;
 }
 
 .btn:hover {
-  background: #1a1a1a;
-  color: #faf8f5;
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  color: var(--color-white);
 }
 
 .btn--filled {
-  background: #1a1a1a;
-  color: #faf8f5;
+  background: var(--color-black);
+  color: var(--color-white);
 }
 
 .btn--filled:hover {
-  background: #333;
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.btn--gold {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  color: var(--color-white);
+}
+
+.btn--gold:hover {
+  background: #b8923e;
+  border-color: #b8923e;
 }
 
 /* ───────────────────────────────
    Dividers & Accents
    ─────────────────────────────── */
 .divider {
-  width: 60px;
+  width: 50px;
   height: 1px;
-  background: #c9b99a;
-  margin: 2rem auto;
+  background: var(--color-gold);
+  margin: 1.5rem auto;
 }
 
 .accent-line {
-  width: 40px;
+  width: 30px;
   height: 1px;
-  background: #c9b99a;
+  background: var(--color-gold);
   margin: 1rem 0;
 }
 
@@ -170,7 +213,7 @@ small,
    Content Prose (Markdown)
    ─────────────────────────────── */
 .prose h2 {
-  margin-top: 4rem;
+  margin-top: 3rem;
   margin-bottom: 1.5rem;
 }
 
@@ -187,6 +230,68 @@ small,
 }
 
 /* ───────────────────────────────
+   Luxury Form Inputs
+   ─────────────────────────────── */
+.input-luxury {
+  width: 100%;
+  padding: 0.85rem 0;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text);
+  outline: none;
+  border-radius: 0;
+  transition: border-color 0.3s var(--ease-luxury);
+  letter-spacing: -0.01em;
+}
+
+.input-luxury:focus {
+  border-bottom-color: var(--color-gold);
+}
+
+.input-luxury::placeholder {
+  color: #bbb;
+  font-weight: 300;
+}
+
+/* ───────────────────────────────
+   Scroll Reveal
+   ─────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s var(--ease-luxury), transform 0.8s var(--ease-luxury);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal--delay-1 { transition-delay: 0.1s; }
+.reveal--delay-2 { transition-delay: 0.2s; }
+.reveal--delay-3 { transition-delay: 0.3s; }
+.reveal--delay-4 { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ───────────────────────────────
+   Body scroll lock
+   ─────────────────────────────── */
+body.nav-open,
+body.cart-open {
+  overflow: hidden;
+}
+
+/* ───────────────────────────────
    Responsive
    ─────────────────────────────── */
 @media (min-width: 768px) {
@@ -195,11 +300,11 @@ small,
   }
 
   .section {
-    padding: 7rem 0;
+    padding: 8rem 0;
   }
 
   .section--hero {
-    padding: 12rem 0 8rem;
+    padding: 14rem 0 6rem;
   }
 }
 

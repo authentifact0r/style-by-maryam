@@ -1,15 +1,17 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Cart from '../components/Cart.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
 import '../styles/global.css';
 
 const {
-  title = 'Style by Maryam',
+  title = 'Styled by Maryam',
   description = 'Luxury fashion curated by Maryam',
   ogImage = '/assets/images/og-default.jpg',
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://stylebymaryam.com');
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://styledbymaryam.com');
 ---
 
 <!DOCTYPE html>
@@ -24,13 +26,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://stylebym
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalURL} />
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:site_name" content="Style by Maryam" />
+    <meta property="og:site_name" content="Styled by Maryam" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -58,6 +65,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://stylebym
       <slot />
     </main>
     <Footer />
+    <Cart />
+    <ScrollReveal />
 
     <!-- Instagram Embed Script -->
     <script is:inline src="https://www.instagram.com/embed.js" async></script>

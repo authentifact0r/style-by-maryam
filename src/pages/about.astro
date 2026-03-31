@@ -10,24 +10,24 @@ const { title, description } = aboutEntry.data;
 <BaseLayout title={title} description={description}>
   <section class="page-hero section--hero">
     <div class="container">
-      <p class="page-hero__caption">Our Story</p>
-      <h1>About</h1>
-      <div class="divider"></div>
+      <p class="page-hero__caption reveal">Our Story</p>
+      <h1 class="reveal reveal--delay-1">About</h1>
+      <div class="divider reveal reveal--delay-2"></div>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
       <div class="about-content">
-        <div class="about-image">
+        <div class="about-image reveal">
           <img
             src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=800&q=80&fit=crop"
-            alt="Style by Maryam — fashion portrait"
+            alt="Styled by Maryam — fashion portrait"
             class="about-image__photo"
             loading="lazy"
           />
         </div>
-        <div class="about-text prose">
+        <div class="about-text prose reveal reveal--delay-2">
           <Content />
         </div>
       </div>
@@ -37,11 +37,12 @@ const { title, description } = aboutEntry.data;
 
 <style>
   .page-hero__caption {
-    font-family: 'Helvetica Neue', 'Arial', sans-serif;
-    font-size: 0.7rem;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.3em;
-    color: #999;
+    color: var(--color-text-muted);
     margin-bottom: 1.5rem;
   }
 

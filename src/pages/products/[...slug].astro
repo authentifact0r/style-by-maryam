@@ -26,12 +26,20 @@ const categoryLabels = {
   'ready-to-wear': 'Ready-to-Wear',
   'accessories': 'Accessories',
 };
+
+const productData = JSON.stringify({
+  id: product.id,
+  name: product.data.name,
+  price: product.data.price,
+  image: product.data.image || '',
+  category: product.data.category,
+});
 ---
 
-<BaseLayout title={`${product.data.name} — Style by Maryam`} description={product.data.description}>
+<BaseLayout title={`${product.data.name} — Styled by Maryam`} description={product.data.description}>
   <section class="product-detail">
     <div class="container">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
+      <nav class="breadcrumb reveal" aria-label="Breadcrumb">
         <a href="/">Home</a>
         <span class="breadcrumb__sep">/</span>
         <a href="/shop">Shop</a>
@@ -40,7 +48,7 @@ const categoryLabels = {
       </nav>
 
       <div class="product-layout">
-        <div class="product-image">
+        <div class="product-image reveal">
           {product.data.image ? (
             <img src={product.data.image} alt={product.data.name} />
           ) : (
@@ -50,7 +58,7 @@ const categoryLabels = {
           )}
         </div>
 
-        <div class="product-info">
+        <div class="product-info reveal reveal--delay-2">
           <p class="product-info__category">{categoryLabels[product.data.category]}</p>
           <h1 class="product-info__name">{product.data.name}</h1>
           <div class="accent-line"></div>
@@ -60,7 +68,12 @@ const categoryLabels = {
           {product.data.soldOut ? (
             <span class="btn product-info__sold-out">Sold Out</span>
           ) : (
-            <a href="#enquire" class="btn btn--filled">Enquire</a>
+            <button
+              class="btn btn--filled add-to-bag-btn"
+              data-product={productData}
+            >
+              Add to Bag
+            </button>
           )}
 
           <div class="product-body prose">
@@ -78,73 +91,73 @@ const categoryLabels = {
     padding-bottom: 5rem;
   }
 
-  /* Breadcrumb */
   .breadcrumb {
-    font-family: 'Helvetica Neue', 'Arial', sans-serif;
-    font-size: 0.7rem;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: #999;
+    color: var(--color-text-muted);
     margin-bottom: 3rem;
   }
 
   .breadcrumb a {
-    color: #999;
-    transition: color 0.2s ease;
+    color: var(--color-text-muted);
+    transition: color 0.2s;
   }
 
   .breadcrumb a:hover {
-    color: #111;
+    color: var(--color-gold);
   }
 
   .breadcrumb__sep {
     margin: 0 0.5rem;
-    color: #ccc;
+    color: #ddd;
   }
 
-  /* Layout */
   .product-layout {
     display: grid;
     grid-template-columns: 1fr;
     gap: 3rem;
   }
 
-  /* Image */
   .product-image img {
     width: 100%;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
   }
 
   .product-image__placeholder {
     width: 100%;
-    aspect-ratio: 3 / 4;
-    background: linear-gradient(180deg, #ece7df 0%, #ddd6ca 100%);
+    aspect-ratio: 4 / 5;
+    background: linear-gradient(180deg, #f0ece6 0%, #e5dfd6 100%);
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  /* Info */
   .product-info__category {
-    font-family: 'Helvetica Neue', 'Arial', sans-serif;
-    font-size: 0.7rem;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.25em;
-    color: #999;
+    color: var(--color-text-muted);
     margin-bottom: 0.75rem;
   }
 
   .product-info__name {
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-    letter-spacing: 0.08em;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    letter-spacing: 0.02em;
     margin-bottom: 0;
   }
 
   .product-info__price {
-    font-family: 'Helvetica Neue', 'Arial', sans-serif;
-    font-size: 1.1rem;
-    color: #555;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-style: italic;
+    font-weight: 300;
+    color: #666;
     margin: 1.5rem 0;
   }
 
@@ -153,7 +166,7 @@ const categoryLabels = {
   }
 
   .product-info__sold-out {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
     pointer-events: none;
   }
@@ -161,7 +174,7 @@ const categoryLabels = {
   .product-body {
     margin-top: 3rem;
     padding-top: 2rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    border-top: 0.5px solid var(--color-border);
   }
 
   @media (min-width: 768px) {
@@ -177,3 +190,12 @@ const categoryLabels = {
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll('.add-to-bag-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const product = JSON.parse(btn.dataset.product);
+      if (window.addToCart) window.addToCart(product);
+    });
+  });
+</script>

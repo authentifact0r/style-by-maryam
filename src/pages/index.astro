@@ -23,15 +23,16 @@ function formatPrice(price) {
   <!-- Hero Section -->
   <section class="hero section--hero">
     <div class="container">
-      <p class="hero__caption">Curated Luxury</p>
-      <h1 class="hero__title">{title}</h1>
-      <div class="divider"></div>
-      <p class="hero__subtitle">Timeless elegance for the modern woman</p>
+      <p class="hero__caption reveal">Curated Luxury</p>
+      <h1 class="hero__title reveal reveal--delay-1">{title}</h1>
+      <div class="divider reveal reveal--delay-2"></div>
+      <p class="hero__subtitle reveal reveal--delay-3">Timeless elegance for the modern woman</p>
+      <a href="/shop" class="btn hero__cta reveal reveal--delay-4">Explore the Collection</a>
     </div>
   </section>
 
   <!-- Hero Image Band -->
-  <section class="hero-image">
+  <section class="hero-image reveal">
     <img
       src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&q=80&fit=crop"
       alt="Luxury fashion editorial"
@@ -43,38 +44,43 @@ function formatPrice(price) {
   <!-- Brand Story -->
   <section class="section">
     <div class="container text-center">
-      <p class="caption">The Ethos</p>
-      <div class="accent-line" style="margin: 1rem auto;"></div>
-      <div class="prose" style="max-width: 700px; margin: 0 auto;">
+      <p class="caption reveal">The Ethos</p>
+      <div class="accent-line reveal reveal--delay-1" style="margin: 1rem auto;"></div>
+      <div class="prose reveal reveal--delay-2" style="max-width: 650px; margin: 0 auto;">
         <Content />
       </div>
     </div>
   </section>
 
-  <!-- Featured Products -->
-  <section class="section collections">
+  <!-- Featured Products — Asymmetric Editorial Grid -->
+  <section class="section editorial-section">
     <div class="container">
       <div class="text-center">
-        <p class="caption">Selected Pieces</p>
-        <div class="accent-line" style="margin: 1rem auto;"></div>
-        <h2>The Edit</h2>
+        <p class="caption reveal">Selected Pieces</p>
+        <div class="accent-line reveal reveal--delay-1" style="margin: 1rem auto;"></div>
+        <h2 class="reveal reveal--delay-2">The Edit</h2>
       </div>
-      <div class="collections__grid">
-        {featured.map(product => (
-          <a href={`/products/${product.id}`} class="collection-card">
-            <div class="collection-card__image">
+      <div class="editorial-grid">
+        {featured.map((product, i) => (
+          <a
+            href={`/products/${product.id}`}
+            class={`editorial-card editorial-card--${i + 1} reveal reveal--delay-${i + 1}`}
+          >
+            <div class="editorial-card__image">
               {product.data.image ? (
                 <img src={product.data.image} alt={product.data.name} loading="lazy" />
               ) : (
                 <span class="caption">{product.data.category}</span>
               )}
             </div>
-            <h3 class="collection-card__title">{product.data.name}</h3>
-            <p class="collection-card__price">{formatPrice(product.data.price)}</p>
+            <div class="editorial-card__info">
+              <h3>{product.data.name}</h3>
+              <span class="editorial-card__price">{formatPrice(product.data.price)}</span>
+            </div>
           </a>
         ))}
       </div>
-      <div class="text-center" style="margin-top: 3rem;">
+      <div class="text-center reveal" style="margin-top: 3.5rem;">
         <a href="/shop" class="btn">View All</a>
       </div>
     </div>
@@ -83,13 +89,13 @@ function formatPrice(price) {
   <!-- Instagram Section -->
   <section class="section instagram-section">
     <div class="container text-center">
-      <p class="caption">Follow the Journey</p>
-      <div class="accent-line" style="margin: 1rem auto;"></div>
-      <h2>@styleddbymaryam</h2>
-      <p style="margin: 1rem auto 3rem; max-width: 500px;">Behind the scenes, styling tips, and new arrivals — straight from Maryam.</p>
+      <p class="caption reveal">Follow the Journey</p>
+      <div class="accent-line reveal reveal--delay-1" style="margin: 1rem auto;"></div>
+      <h2 class="reveal reveal--delay-2">@styleddbymaryam</h2>
+      <p class="reveal reveal--delay-3" style="margin: 1rem auto 3rem; max-width: 450px;">Behind the scenes, styling tips, and new arrivals — straight from Maryam.</p>
 
       <div class="instagram-grid">
-        <div class="instagram-embed">
+        <div class="instagram-embed reveal">
           <blockquote
             class="instagram-media"
             data-instgrm-captioned
@@ -98,7 +104,7 @@ function formatPrice(price) {
             style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; max-width:540px; min-width:326px; padding:0; width:100%;">
           </blockquote>
         </div>
-        <div class="instagram-embed">
+        <div class="instagram-embed reveal reveal--delay-1">
           <blockquote
             class="instagram-media"
             data-instgrm-captioned
@@ -107,7 +113,7 @@ function formatPrice(price) {
             style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; max-width:540px; min-width:326px; padding:0; width:100%;">
           </blockquote>
         </div>
-        <div class="instagram-embed">
+        <div class="instagram-embed reveal reveal--delay-2">
           <blockquote
             class="instagram-media"
             data-instgrm-captioned
@@ -122,7 +128,7 @@ function formatPrice(price) {
         href="https://www.instagram.com/styleddbymaryam/"
         target="_blank"
         rel="noopener noreferrer"
-        class="btn"
+        class="btn reveal"
         style="margin-top: 3rem;"
       >
         Follow on Instagram
@@ -133,21 +139,27 @@ function formatPrice(price) {
   <!-- Call to Action -->
   <section class="section cta">
     <div class="container text-center">
-      <h2>Explore the Collection</h2>
-      <p style="margin: 1.5rem auto;">Discover pieces selected for their craft, quality, and quiet confidence.</p>
-      <a href="/shop" class="btn" style="margin-top: 1rem;">Shop Now</a>
+      <h2 class="reveal">Explore the Collection</h2>
+      <p class="reveal reveal--delay-1" style="margin: 1.5rem auto;">Discover pieces selected for their craft, quality, and quiet confidence.</p>
+      <a href="/shop" class="btn reveal reveal--delay-2" style="margin-top: 0.5rem;">Shop Now</a>
     </div>
   </section>
 </BaseLayout>
 
 <style>
   /* Hero */
+  .hero {
+    padding-top: 12rem;
+    padding-bottom: 4rem;
+  }
+
   .hero__caption {
-    font-family: 'Helvetica Neue', 'Arial', sans-serif;
-    font-size: 0.7rem;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.3em;
-    color: #999;
+    color: var(--color-text-muted);
     margin-bottom: 1.5rem;
   }
 
@@ -156,19 +168,25 @@ function formatPrice(price) {
   }
 
   .hero__subtitle {
-    font-family: 'Georgia', 'Times New Roman', serif;
+    font-family: var(--font-display);
     font-style: italic;
-    font-size: 1.1rem;
-    color: #666;
+    font-weight: 300;
+    font-size: 1.2rem;
+    color: #888;
     margin-top: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero__cta {
+    margin-top: 0;
   }
 
   /* Hero Image */
   .hero-image {
     width: 100%;
-    height: 60vh;
+    height: 65vh;
     min-height: 300px;
-    max-height: 700px;
+    max-height: 750px;
     overflow: hidden;
   }
 
@@ -179,59 +197,102 @@ function formatPrice(price) {
     object-position: center top;
   }
 
-  /* Collections Grid */
-  .collections__grid {
+  /* Asymmetric Editorial Grid */
+  .editorial-section {
+    background: var(--color-white);
+  }
+
+  .editorial-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 2rem;
     margin-top: 3rem;
   }
 
-  .collection-card {
-    text-align: center;
+  .editorial-card {
+    display: block;
+    text-align: left;
   }
 
-  .collection-card__image {
-    aspect-ratio: 3 / 4;
-    background: linear-gradient(180deg, #ece7df 0%, #ddd6ca 100%);
+  .editorial-card__image {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: linear-gradient(180deg, #f0ece6 0%, #e5dfd6 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.25rem;
-    transition: opacity 0.3s ease;
+    margin-bottom: 1rem;
   }
 
-  .collection-card:hover .collection-card__image {
-    opacity: 0.85;
-  }
-
-  .collection-card__title {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-  }
-
-  .collection-card__price {
-    font-family: 'Helvetica Neue', 'Arial', sans-serif;
-    font-size: 0.85rem;
-    color: #888;
-    margin-top: 0.25rem;
-  }
-
-  .collection-card__image img {
+  .editorial-card__image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: transform 0.6s var(--ease-luxury), filter 0.6s var(--ease-luxury);
   }
 
-  .collection-card:hover .collection-card__image img {
-    transform: scale(1.03);
+  .editorial-card:hover .editorial-card__image img {
+    transform: scale(1.04);
+    filter: brightness(1.05);
   }
 
-  /* Instagram Section */
+  .editorial-card__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .editorial-card__info h3 {
+    font-size: 0.75rem;
+  }
+
+  .editorial-card__price {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 300;
+    color: #888;
+    white-space: nowrap;
+  }
+
+  /* Desktop: asymmetric layout */
+  @media (min-width: 768px) {
+    .hero {
+      padding-top: 16rem;
+      padding-bottom: 5rem;
+    }
+
+    .editorial-grid {
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: auto;
+      gap: 1.5rem;
+    }
+
+    .editorial-card--1 {
+      grid-column: 1 / 8;
+      grid-row: 1 / 3;
+    }
+
+    .editorial-card--1 .editorial-card__image {
+      aspect-ratio: 3 / 4;
+      height: 100%;
+    }
+
+    .editorial-card--2 {
+      grid-column: 8 / 13;
+      grid-row: 1 / 2;
+    }
+
+    .editorial-card--3 {
+      grid-column: 8 / 13;
+      grid-row: 2 / 3;
+    }
+  }
+
+  /* Instagram */
   .instagram-section {
-    background: #fff;
+    background: var(--color-bone);
   }
 
   .instagram-grid {
@@ -256,18 +317,13 @@ function formatPrice(price) {
 
   /* CTA */
   .cta {
-    background: #f5f1eb;
-    padding: 6rem 0;
+    background: var(--color-white);
+    padding: 7rem 0;
   }
 
   @media (min-width: 768px) {
-    .collections__grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-    }
-
     .cta {
-      padding: 8rem 0;
+      padding: 10rem 0;
     }
   }
 </style>
