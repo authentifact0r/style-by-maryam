@@ -32,9 +32,12 @@ function formatPrice(price) {
 
   <!-- Hero Image Band -->
   <section class="hero-image">
-    <div class="hero-image__placeholder">
-      <span class="caption">Editorial Image</span>
-    </div>
+    <img
+      src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&q=80&fit=crop"
+      alt="Luxury fashion editorial"
+      class="hero-image__img"
+      loading="eager"
+    />
   </section>
 
   <!-- Brand Story -->
@@ -77,6 +80,56 @@ function formatPrice(price) {
     </div>
   </section>
 
+  <!-- Instagram Section -->
+  <section class="section instagram-section">
+    <div class="container text-center">
+      <p class="caption">Follow the Journey</p>
+      <div class="accent-line" style="margin: 1rem auto;"></div>
+      <h2>@styleddbymaryam</h2>
+      <p style="margin: 1rem auto 3rem; max-width: 500px;">Behind the scenes, styling tips, and new arrivals — straight from Maryam.</p>
+
+      <div class="instagram-grid">
+        <div class="instagram-embed">
+          <blockquote
+            class="instagram-media"
+            data-instgrm-captioned
+            data-instgrm-permalink="https://www.instagram.com/reel/DH0IVdONfSj/"
+            data-instgrm-version="14"
+            style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; max-width:540px; min-width:326px; padding:0; width:100%;">
+          </blockquote>
+        </div>
+        <div class="instagram-embed">
+          <blockquote
+            class="instagram-media"
+            data-instgrm-captioned
+            data-instgrm-permalink="https://www.instagram.com/reel/DHxkYP6tRSV/"
+            data-instgrm-version="14"
+            style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; max-width:540px; min-width:326px; padding:0; width:100%;">
+          </blockquote>
+        </div>
+        <div class="instagram-embed">
+          <blockquote
+            class="instagram-media"
+            data-instgrm-captioned
+            data-instgrm-permalink="https://www.instagram.com/reel/DHs7dINNVb4/"
+            data-instgrm-version="14"
+            style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 0 auto; max-width:540px; min-width:326px; padding:0; width:100%;">
+          </blockquote>
+        </div>
+      </div>
+
+      <a
+        href="https://www.instagram.com/styleddbymaryam/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn"
+        style="margin-top: 3rem;"
+      >
+        Follow on Instagram
+      </a>
+    </div>
+  </section>
+
   <!-- Call to Action -->
   <section class="section cta">
     <div class="container text-center">
@@ -111,15 +164,19 @@ function formatPrice(price) {
   }
 
   /* Hero Image */
-  .hero-image__placeholder {
+  .hero-image {
     width: 100%;
     height: 60vh;
     min-height: 300px;
     max-height: 700px;
-    background: linear-gradient(135deg, #e8e2d8 0%, #d4cdc0 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-image__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
   }
 
   /* Collections Grid */
@@ -170,6 +227,31 @@ function formatPrice(price) {
 
   .collection-card:hover .collection-card__image img {
     transform: scale(1.03);
+  }
+
+  /* Instagram Section */
+  .instagram-section {
+    background: #fff;
+  }
+
+  .instagram-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .instagram-embed {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .instagram-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
   }
 
   /* CTA */

@@ -2,6 +2,7 @@
 name: "Silk Evening Gown"
 price: 1250
 description: "Floor-length silk gown with a sculpted bodice and flowing train. Made for moments that matter."
+image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&q=80&fit=crop"
 category: "evening"
 featured: true
 soldOut: false
