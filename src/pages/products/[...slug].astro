@@ -1,0 +1,179 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const products = await getCollection('products');
+  return products.map(product => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+
+function formatPrice(price) {
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+    minimumFractionDigits: 0,
+  }).format(price);
+}
+
+const categoryLabels = {
+  'evening': 'Evening',
+  'ready-to-wear': 'Ready-to-Wear',
+  'accessories': 'Accessories',
+};
+---
+
+<BaseLayout title={`${product.data.name} — Style by Maryam`} description={product.data.description}>
+  <section class="product-detail">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="breadcrumb__sep">/</span>
+        <a href="/shop">Shop</a>
+        <span class="breadcrumb__sep">/</span>
+        <span>{product.data.name}</span>
+      </nav>
+
+      <div class="product-layout">
+        <div class="product-image">
+          {product.data.image ? (
+            <img src={product.data.image} alt={product.data.name} />
+          ) : (
+            <div class="product-image__placeholder">
+              <span class="caption">{product.data.category}</span>
+            </div>
+          )}
+        </div>
+
+        <div class="product-info">
+          <p class="product-info__category">{categoryLabels[product.data.category]}</p>
+          <h1 class="product-info__name">{product.data.name}</h1>
+          <div class="accent-line"></div>
+          <p class="product-info__price">{formatPrice(product.data.price)}</p>
+          <p class="product-info__desc">{product.data.description}</p>
+
+          {product.data.soldOut ? (
+            <span class="btn product-info__sold-out">Sold Out</span>
+          ) : (
+            <a href="#enquire" class="btn btn--filled">Enquire</a>
+          )}
+
+          <div class="product-body prose">
+            <Content />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .product-detail {
+    padding-top: 7rem;
+    padding-bottom: 5rem;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #999;
+    margin-bottom: 3rem;
+  }
+
+  .breadcrumb a {
+    color: #999;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb a:hover {
+    color: #111;
+  }
+
+  .breadcrumb__sep {
+    margin: 0 0.5rem;
+    color: #ccc;
+  }
+
+  /* Layout */
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  /* Image */
+  .product-image img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .product-image__placeholder {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: linear-gradient(180deg, #ece7df 0%, #ddd6ca 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Info */
+  .product-info__category {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: #999;
+    margin-bottom: 0.75rem;
+  }
+
+  .product-info__name {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    letter-spacing: 0.08em;
+    margin-bottom: 0;
+  }
+
+  .product-info__price {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 1.1rem;
+    color: #555;
+    margin: 1.5rem 0;
+  }
+
+  .product-info__desc {
+    margin-bottom: 2rem;
+  }
+
+  .product-info__sold-out {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .product-body {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  @media (min-width: 768px) {
+    .product-layout {
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .product-detail {
+      padding-top: 9rem;
+      padding-bottom: 7rem;
+    }
+  }
+</style>

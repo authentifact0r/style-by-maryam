@@ -59,7 +59,7 @@ function formatPrice(price) {
       <!-- Product Grid -->
       <div class="product-grid">
         {products.map(product => (
-          <article class="product-card" data-category={product.data.category}>
+          <a href={`/products/${product.id}`} class="product-card" data-category={product.data.category}>
             <div class="product-card__image">
               {product.data.image ? (
                 <img src={product.data.image} alt={product.data.name} loading="lazy" />
@@ -75,7 +75,7 @@ function formatPrice(price) {
               <p class="product-card__price">{formatPrice(product.data.price)}</p>
             </div>
             <p class="product-card__desc">{product.data.description}</p>
-          </article>
+          </a>
         ))}
       </div>
     </div>

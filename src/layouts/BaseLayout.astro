@@ -3,7 +3,13 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
-const { title = 'Style by Maryam', description = 'Luxury fashion curated by Maryam' } = Astro.props;
+const {
+  title = 'Style by Maryam',
+  description = 'Luxury fashion curated by Maryam',
+  ogImage = '/assets/images/og-default.jpg',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://stylebymaryam.com');
 ---
 
 <!DOCTYPE html>
@@ -16,6 +22,21 @@ const { title = 'Style by Maryam', description = 'Luxury fashion curated by Mary
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Style by Maryam" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <!-- Netlify Identity redirect -->
     <script is:inline>

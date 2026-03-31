@@ -58,7 +58,7 @@ function formatPrice(price) {
       </div>
       <div class="collections__grid">
         {featured.map(product => (
-          <div class="collection-card">
+          <a href={`/products/${product.id}`} class="collection-card">
             <div class="collection-card__image">
               {product.data.image ? (
                 <img src={product.data.image} alt={product.data.name} loading="lazy" />
@@ -68,7 +68,7 @@ function formatPrice(price) {
             </div>
             <h3 class="collection-card__title">{product.data.name}</h3>
             <p class="collection-card__price">{formatPrice(product.data.price)}</p>
-          </div>
+          </a>
         ))}
       </div>
       <div class="text-center" style="margin-top: 3rem;">
