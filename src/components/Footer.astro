@@ -1,0 +1,79 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">Style by Maryam</div>
+    <div class="footer-tagline">Curated Luxury. Timeless Elegance.</div>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/shop">Shop</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="footer-copy">
+      &copy; {currentYear} Style by Maryam. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 4rem 1.5rem 2.5rem;
+    text-align: center;
+    background: #faf8f5;
+  }
+
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-brand {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #111;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-tagline {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #999;
+    margin-bottom: 2rem;
+  }
+
+  .footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-nav a {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #666;
+    transition: color 0.2s ease;
+  }
+
+  .footer-nav a:hover {
+    color: #111;
+  }
+
+  .footer-copy {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.7rem;
+    color: #aaa;
+    letter-spacing: 0.05em;
+  }
+</style>
