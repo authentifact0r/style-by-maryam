@@ -1,0 +1,233 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry, getCollection, render } from 'astro:content';
+
+const shopEntry = await getEntry('pages', 'shop');
+const { Content } = await render(shopEntry);
+const { title, description } = shopEntry.data;
+
+const allProducts = await getCollection('products');
+const products = allProducts.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return 0;
+});
+
+const categories = [
+  { slug: 'all', label: 'All' },
+  { slug: 'evening', label: 'Evening' },
+  { slug: 'ready-to-wear', label: 'Ready-to-Wear' },
+  { slug: 'accessories', label: 'Accessories' },
+];
+
+function formatPrice(price) {
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+    minimumFractionDigits: 0,
+  }).format(price);
+}
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="page-hero section--hero">
+    <div class="container">
+      <p class="page-hero__caption">The Edit</p>
+      <h1>Shop</h1>
+      <div class="divider"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="shop-intro prose text-center" style="max-width: 600px; margin: 0 auto 3rem;">
+        <Content />
+      </div>
+
+      <!-- Category Filter -->
+      <nav class="filter-bar" aria-label="Filter by category">
+        {categories.map(cat => (
+          <button
+            class={`filter-btn ${cat.slug === 'all' ? 'is-active' : ''}`}
+            data-filter={cat.slug}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </nav>
+
+      <!-- Product Grid -->
+      <div class="product-grid">
+        {products.map(product => (
+          <article class="product-card" data-category={product.data.category}>
+            <div class="product-card__image">
+              {product.data.image ? (
+                <img src={product.data.image} alt={product.data.name} loading="lazy" />
+              ) : (
+                <span class="caption">{product.data.category}</span>
+              )}
+              {product.data.soldOut && (
+                <span class="product-card__badge">Sold Out</span>
+              )}
+            </div>
+            <div class="product-card__info">
+              <h3 class="product-card__name">{product.data.name}</h3>
+              <p class="product-card__price">{formatPrice(product.data.price)}</p>
+            </div>
+            <p class="product-card__desc">{product.data.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero__caption {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: #999;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Filter Bar */
+  .filter-bar {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #999;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .filter-btn:hover,
+  .filter-btn.is-active {
+    color: #111;
+    border-bottom-color: #c9b99a;
+  }
+
+  /* Product Grid */
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .product-card {
+    transition: opacity 0.3s ease;
+  }
+
+  .product-card.is-hidden {
+    display: none;
+  }
+
+  .product-card__image {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    background: linear-gradient(180deg, #ece7df 0%, #ddd6ca 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+  }
+
+  .product-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .product-card:hover .product-card__image img {
+    transform: scale(1.03);
+  }
+
+  .product-card__badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    background: #1a1a1a;
+    color: #faf8f5;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .product-card__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-card__name {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .product-card__price {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.85rem;
+    color: #666;
+    white-space: nowrap;
+  }
+
+  .product-card__desc {
+    font-size: 0.85rem;
+    color: #888;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 640px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .product-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+  }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.product-card');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+
+      const filter = btn.dataset.filter;
+
+      cards.forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.classList.remove('is-hidden');
+        } else {
+          card.classList.add('is-hidden');
+        }
+      });
+    });
+  });
+</script>

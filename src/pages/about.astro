@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry, render } from 'astro:content';
+
+const aboutEntry = await getEntry('pages', 'about');
+const { Content } = await render(aboutEntry);
+const { title, description } = aboutEntry.data;
+---
+
+<BaseLayout title={title} description={description}>
+  <section class="page-hero section--hero">
+    <div class="container">
+      <p class="page-hero__caption">Our Story</p>
+      <h1>About</h1>
+      <div class="divider"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-image">
+          <div class="about-image__placeholder">
+            <span class="caption">Portrait</span>
+          </div>
+        </div>
+        <div class="about-text prose">
+          <Content />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero__caption {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: #999;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .about-image__placeholder {
+    aspect-ratio: 3 / 4;
+    background: linear-gradient(180deg, #ece7df 0%, #ddd6ca 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 768px) {
+    .about-content {
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+  }
+</style>

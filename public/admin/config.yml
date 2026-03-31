@@ -16,3 +16,27 @@ collections:
       - { label: "Publish Date", name: "publishDate", widget: "datetime" }
       - { label: "Description", name: "description", widget: "string" }
       - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "products"
+    label: "Products"
+    folder: "src/content/products"
+    create: true
+    format: "frontmatter"
+    extension: "md"
+    slug: "{{slug}}"
+    fields:
+      - { label: "Product Name", name: "name", widget: "string" }
+      - { label: "Price (£)", name: "price", widget: "number", value_type: "int" }
+      - { label: "Short Description", name: "description", widget: "string" }
+      - { label: "Product Image", name: "image", widget: "image", required: false }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Evening", value: "evening" }
+          - { label: "Ready-to-Wear", value: "ready-to-wear" }
+          - { label: "Accessories", value: "accessories" }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false }
+      - { label: "Sold Out", name: "soldOut", widget: "boolean", default: false }
+      - { label: "Publish Date", name: "publishDate", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }

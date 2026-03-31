@@ -1,11 +1,22 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry, render } from 'astro:content';
+import { getEntry, getCollection, render } from 'astro:content';
 
 const homeEntry = await getEntry('pages', 'home');
 const { Content } = await render(homeEntry);
 
 const { title, description } = homeEntry.data;
+
+const allProducts = await getCollection('products');
+const featured = allProducts.filter(p => p.data.featured);
+
+function formatPrice(price) {
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+    minimumFractionDigits: 0,
+  }).format(price);
+}
 ---
 
 <BaseLayout title={title} description={description}>
@@ -37,33 +48,31 @@ const { title, description } = homeEntry.data;
     </div>
   </section>
 
-  <!-- Featured Collections -->
+  <!-- Featured Products -->
   <section class="section collections">
     <div class="container">
       <div class="text-center">
-        <p class="caption">Collections</p>
+        <p class="caption">Selected Pieces</p>
         <div class="accent-line" style="margin: 1rem auto;"></div>
         <h2>The Edit</h2>
       </div>
       <div class="collections__grid">
-        <div class="collection-card">
-          <div class="collection-card__image">
-            <span class="caption">Evening Wear</span>
+        {featured.map(product => (
+          <div class="collection-card">
+            <div class="collection-card__image">
+              {product.data.image ? (
+                <img src={product.data.image} alt={product.data.name} loading="lazy" />
+              ) : (
+                <span class="caption">{product.data.category}</span>
+              )}
+            </div>
+            <h3 class="collection-card__title">{product.data.name}</h3>
+            <p class="collection-card__price">{formatPrice(product.data.price)}</p>
           </div>
-          <h3 class="collection-card__title">Evening</h3>
-        </div>
-        <div class="collection-card">
-          <div class="collection-card__image">
-            <span class="caption">Ready to Wear</span>
-          </div>
-          <h3 class="collection-card__title">Ready-to-Wear</h3>
-        </div>
-        <div class="collection-card">
-          <div class="collection-card__image">
-            <span class="caption">Accessories</span>
-          </div>
-          <h3 class="collection-card__title">Accessories</h3>
-        </div>
+        ))}
+      </div>
+      <div class="text-center" style="margin-top: 3rem;">
+        <a href="/shop" class="btn">View All</a>
       </div>
     </div>
   </section>
@@ -143,6 +152,24 @@ const { title, description } = homeEntry.data;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
+  }
+
+  .collection-card__price {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 0.25rem;
+  }
+
+  .collection-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .collection-card:hover .collection-card__image img {
+    transform: scale(1.03);
   }
 
   /* CTA */
