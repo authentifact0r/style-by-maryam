@@ -34,7 +34,7 @@ const navLinks = [
     top: 0;
     left: 0;
     right: 0;
-    z-index: 100;
+    z-index: 1000;
     background: rgba(250, 248, 245, 0.95);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -48,6 +48,8 @@ const navLinks = [
     max-width: 1200px;
     margin: 0 auto;
     padding: 1.25rem 1.5rem;
+    position: relative;
+    z-index: 1002;
   }
 
   .brand {
@@ -57,89 +59,113 @@ const navLinks = [
     letter-spacing: 0.2em;
     font-weight: 400;
     color: #111;
+    z-index: 1002;
+    position: relative;
   }
 
   /* Mobile toggle */
   .nav-toggle {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding: 4px;
-    z-index: 110;
+    gap: 6px;
+    padding: 8px;
+    z-index: 1002;
+    position: relative;
+    cursor: pointer;
   }
 
   .nav-toggle__bar {
     display: block;
-    width: 22px;
-    height: 1px;
+    width: 24px;
+    height: 1.5px;
     background: #111;
     transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
   }
 
   .nav-toggle[aria-expanded="true"] .nav-toggle__bar:first-child {
-    transform: translateY(3px) rotate(45deg);
+    transform: translateY(3.75px) rotate(45deg);
   }
 
   .nav-toggle[aria-expanded="true"] .nav-toggle__bar:last-child {
-    transform: translateY(-3px) rotate(-45deg);
+    transform: translateY(-3.75px) rotate(-45deg);
   }
 
-  /* Nav */
+  /* Mobile Nav Overlay */
   .nav {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
     background: #faf8f5;
+    z-index: 1001;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transition: opacity 0.3s ease, visibility 0.3s ease;
   }
 
   .nav.is-open {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
   }
 
   .nav__list {
     text-align: center;
+    padding: 0;
+    margin: 0;
   }
 
   .nav__item {
-    margin: 1.5rem 0;
+    margin: 2.5rem 0;
   }
 
   .nav__link {
     font-family: 'Helvetica Neue', 'Arial', sans-serif;
-    font-size: 0.7rem;
+    font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.25em;
     color: #333;
     transition: color 0.2s ease;
     position: relative;
+    padding: 0.75rem 1.5rem;
+    display: inline-block;
   }
 
   .nav__link::after {
     content: '';
     position: absolute;
-    bottom: -4px;
-    left: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 0;
     height: 1px;
     background: #c9b99a;
     transition: width 0.3s ease;
   }
 
-  .nav__link:hover {
+  .nav__link:hover,
+  .nav__link:active {
     color: #111;
   }
 
-  .nav__link:hover::after {
-    width: 100%;
+  .nav__link:hover::after,
+  .nav__link:active::after {
+    width: 60%;
+  }
+
+  /* Lock body scroll when nav is open */
+  :global(body.nav-open) {
+    overflow: hidden;
   }
 
   /* Desktop */
@@ -150,9 +176,13 @@ const navLinks = [
 
     .nav {
       position: static;
+      width: auto;
+      height: auto;
       background: none;
       opacity: 1;
       visibility: visible;
+      pointer-events: auto;
+      flex-direction: row;
     }
 
     .nav__list {
@@ -163,16 +193,52 @@ const navLinks = [
     .nav__item {
       margin: 0;
     }
+
+    .nav__link {
+      font-size: 0.7rem;
+      padding: 0;
+    }
+
+    .nav__link::after {
+      left: 0;
+      transform: none;
+      bottom: -4px;
+    }
+
+    .nav__link:hover::after {
+      width: 100%;
+    }
   }
 </style>
 
 <script>
   const toggle = document.querySelector('.nav-toggle');
   const nav = document.querySelector('.nav');
+  const navLinks = document.querySelectorAll('.nav__link');
+
+  function closeMenu() {
+    toggle.setAttribute('aria-expanded', 'false');
+    nav.classList.remove('is-open');
+    document.body.classList.remove('nav-open');
+  }
+
+  function openMenu() {
+    toggle.setAttribute('aria-expanded', 'true');
+    nav.classList.add('is-open');
+    document.body.classList.add('nav-open');
+  }
 
   toggle.addEventListener('click', () => {
     const expanded = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!expanded));
-    nav.classList.toggle('is-open');
+    if (expanded) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  // Close menu when a link is tapped
+  navLinks.forEach(link => {
+    link.addEventListener('click', closeMenu);
   });
 </script>
