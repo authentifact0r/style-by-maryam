@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://styledbymaryam.com/sitemap-index.xml
