@@ -20,24 +20,17 @@ function formatPrice(price) {
 ---
 
 <BaseLayout title={title} description={description}>
-  <!-- Hero Section -->
-  <section class="hero section--hero">
-    <div class="container">
-      <p class="hero__caption reveal">Curated Luxury</p>
-      <h1 class="hero__title reveal reveal--delay-1">{title}</h1>
-      <div class="divider reveal reveal--delay-2"></div>
-      <p class="hero__subtitle reveal reveal--delay-3">Timeless elegance for the modern woman</p>
-      <a href="/shop" class="btn hero__cta reveal reveal--delay-4">Explore the Collection</a>
-    </div>
-  </section>
-
-  <!-- Hero Video Banner -->
+  <!-- Full-Screen Video Hero -->
   <section class="hero-video">
     <video autoplay muted loop playsinline class="hero-video__vid" poster="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&q=80&fit=crop">
-      <source src="https://videos.pexels.com/video-files/3753716/3753716-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+      <source src="https://videos.pexels.com/video-files/5721025/5721025-uhd_2560_1440_25fps.mp4" type="video/mp4" />
     </video>
     <div class="hero-video__overlay">
-      <p class="hero-video__tagline">Curated for the woman who knows her worth</p>
+      <p class="hero-video__caption">Curated Luxury</p>
+      <h1 class="hero-video__title">{title}</h1>
+      <div class="hero-video__divider"></div>
+      <p class="hero-video__subtitle">Timeless elegance for the modern woman</p>
+      <a href="/shop" class="hero-video__cta">Explore the Collection</a>
     </div>
   </section>
 
@@ -156,47 +149,13 @@ function formatPrice(price) {
 </BaseLayout>
 
 <style>
-  /* Hero */
-  .hero {
-    padding-top: 12rem;
-    padding-bottom: 4rem;
-  }
-
-  .hero__caption {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: var(--color-text-muted);
-    margin-bottom: 1.5rem;
-  }
-
-  .hero__title {
-    margin-bottom: 0;
-  }
-
-  .hero__subtitle {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 300;
-    font-size: 1.2rem;
-    color: #888;
-    margin-top: 0.5rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .hero__cta {
-    margin-top: 0;
-  }
-
-  /* Hero Video */
+  /* Full-Screen Video Hero */
   .hero-video {
     position: relative;
     width: 100%;
-    height: 70vh;
-    min-height: 350px;
-    max-height: 800px;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 500px;
     overflow: hidden;
   }
 
@@ -204,29 +163,76 @@ function formatPrice(price) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center 30%;
   }
 
   .hero-video__overlay {
     position: absolute;
     inset: 0;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    background: linear-gradient(transparent 50%, rgba(0,0,0,0.3));
-    padding: 3rem 2rem;
+    background: rgba(0, 0, 0, 0.35);
+    text-align: center;
+    padding: 2rem;
   }
 
-  .hero-video__tagline {
+  .hero-video__caption {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.35em;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-video__title {
     font-family: var(--font-display);
-    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-size: clamp(3rem, 7vw, 6rem);
     font-style: italic;
     font-weight: 300;
     color: var(--color-white);
-    letter-spacing: 0.04em;
-    text-align: center;
+    letter-spacing: 0.02em;
     margin: 0;
+    line-height: 1.05;
+  }
+
+  .hero-video__divider {
+    width: 50px;
+    height: 1px;
+    background: var(--color-gold);
+    margin: 1.5rem auto;
+  }
+
+  .hero-video__subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 2.5rem;
     max-width: none;
+  }
+
+  .hero-video__cta {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    padding: 1rem 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: var(--color-white);
+    transition: all 0.4s var(--ease-luxury);
+  }
+
+  .hero-video__cta:hover {
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+    color: var(--color-white);
   }
 
   /* Asymmetric Editorial Grid */
@@ -290,11 +296,6 @@ function formatPrice(price) {
 
   /* Desktop: asymmetric layout */
   @media (min-width: 768px) {
-    .hero {
-      padding-top: 16rem;
-      padding-bottom: 5rem;
-    }
-
     .editorial-grid {
       grid-template-columns: repeat(12, 1fr);
       grid-auto-rows: auto;
