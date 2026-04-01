@@ -31,14 +31,14 @@ function formatPrice(price) {
     </div>
   </section>
 
-  <!-- Hero Image Band -->
-  <section class="hero-image reveal">
-    <img
-      src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&q=80&fit=crop"
-      alt="Luxury fashion editorial"
-      class="hero-image__img"
-      loading="eager"
-    />
+  <!-- Hero Video Banner -->
+  <section class="hero-video">
+    <video autoplay muted loop playsinline class="hero-video__vid" poster="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1600&q=80&fit=crop">
+      <source src="https://videos.pexels.com/video-files/3753716/3753716-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-video__overlay">
+      <p class="hero-video__tagline">Curated for the woman who knows her worth</p>
+    </div>
   </section>
 
   <!-- Brand Story -->
@@ -190,20 +190,43 @@ function formatPrice(price) {
     margin-top: 0;
   }
 
-  /* Hero Image */
-  .hero-image {
+  /* Hero Video */
+  .hero-video {
+    position: relative;
     width: 100%;
-    height: 65vh;
-    min-height: 300px;
-    max-height: 750px;
+    height: 70vh;
+    min-height: 350px;
+    max-height: 800px;
     overflow: hidden;
   }
 
-  .hero-image__img {
+  .hero-video__vid {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
+    object-position: center;
+  }
+
+  .hero-video__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background: linear-gradient(transparent 50%, rgba(0,0,0,0.3));
+    padding: 3rem 2rem;
+  }
+
+  .hero-video__tagline {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--color-white);
+    letter-spacing: 0.04em;
+    text-align: center;
+    margin: 0;
+    max-width: none;
   }
 
   /* Asymmetric Editorial Grid */

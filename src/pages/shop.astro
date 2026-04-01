@@ -38,6 +38,17 @@ function formatPrice(price) {
     </div>
   </section>
 
+  <!-- Luxury Video Banner -->
+  <section class="video-banner">
+    <video autoplay muted loop playsinline class="video-banner__video">
+      <source src="https://videos.pexels.com/video-files/4625514/4625514-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+    </video>
+    <div class="video-banner__overlay">
+      <p class="video-banner__caption">The Collection</p>
+      <h2 class="video-banner__title">Elegance in Motion</h2>
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
       <div class="shop-intro prose text-center reveal" style="max-width: 550px; margin: 0 auto 3rem;">
@@ -56,10 +67,10 @@ function formatPrice(price) {
       </nav>
 
       <div class="product-grid">
-        {products.map((product, i) => (
+        {products.map((product) => (
           <a
             href={`/products/${product.id}`}
-            class={`product-card reveal reveal--delay-${(i % 3) + 1}`}
+            class="product-card"
             data-category={product.data.category}
           >
             <div class="product-card__image">
@@ -94,6 +105,55 @@ function formatPrice(price) {
     margin-bottom: 1.5rem;
   }
 
+  /* Video Banner */
+  .video-banner {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    min-height: 280px;
+    max-height: 550px;
+    overflow: hidden;
+  }
+
+  .video-banner__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .video-banner__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.25);
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .video-banner__caption {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 0.75rem;
+  }
+
+  .video-banner__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--color-white);
+    margin: 0;
+  }
+
+  /* Filter */
   .filter-bar {
     display: flex;
     justify-content: center;
@@ -120,15 +180,15 @@ function formatPrice(price) {
     border-bottom-color: var(--color-gold);
   }
 
+  /* Product Grid */
   .product-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 
   .product-card {
     display: block;
-    transition: opacity 0.3s var(--ease-luxury);
   }
 
   .product-card.is-hidden {
@@ -176,32 +236,37 @@ function formatPrice(price) {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .product-card__name {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 
   .product-card__price {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-style: italic;
     font-weight: 300;
     color: #888;
     white-space: nowrap;
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 768px) {
     .product-grid {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
+    }
+
+    .video-banner {
+      height: 55vh;
+      max-height: 600px;
     }
   }
 
   @media (min-width: 1024px) {
     .product-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 2rem;
     }
   }
