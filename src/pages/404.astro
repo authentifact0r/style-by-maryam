@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Page Not Found — Style by Maryam" description="The page you are looking for does not exist.">
+<BaseLayout title="Page Not Found — Styled by Maryam" description="The page you are looking for does not exist.">
   <section class="not-found section--hero">
     <div class="container text-center">
       <p class="not-found__label">404</p>
@@ -22,12 +22,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .not-found__label {
-    font-family: 'Georgia', 'Times New Roman', serif;
+    font-family: var(--font-display);
     font-size: clamp(4rem, 10vw, 8rem);
     letter-spacing: 0.15em;
-    color: #e8e2d8;
+    color: var(--color-border);
     line-height: 1;
     margin-bottom: 1rem;
+    font-style: normal;
+    font-weight: 300;
   }
 
   .not-found__text {

@@ -433,6 +433,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(p);
   }
 
+  function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
+  }
+
+  function getGiftWrapCost() {
+    const giftToggle = document.getElementById('checkout-gift-toggle');
+    const giftWrap = document.querySelector('#checkout-gift-area input[type="checkbox"]');
+    return (giftToggle && giftToggle.checked && giftWrap && giftWrap.checked) ? 5 : 0;
+  }
+
   function renderSummary() {
     const cart = getCart();
     const itemsEl = document.getElementById('summary-items');
@@ -452,24 +464,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     itemsEl.innerHTML = cart.map(item => `
       <div style="display:flex;gap:0.75rem;align-items:flex-start;">
         <div style="width:56px;height:70px;background:var(--color-bone);flex-shrink:0;overflow:hidden;position:relative;">
-          ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;">` : ''}
-          <span style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:var(--color-text-muted);color:#fff;font-size:0.55rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-body);">${item.qty}</span>
+          ${item.image ? `<img src="${esc(item.image)}" alt="${esc(item.name)}" style="width:100%;height:100%;object-fit:cover;">` : ''}
+          <span style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:var(--color-text-muted);color:#fff;font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-body);">${item.qty}</span>
         </div>
         <div style="flex:1;">
-          <p style="font-family:var(--font-body);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;margin:0;color:var(--color-black);">${item.name}</p>
-          ${item.color ? `<p style="font-size:0.7rem;color:var(--color-text-muted);margin:0.15rem 0 0;">${item.color}${item.size ? ' / ' + item.size : ''}</p>` : ''}
+          <p style="font-family:var(--font-body);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;margin:0;color:var(--color-black);">${esc(item.name)}</p>
+          ${item.color ? `<p style="font-size:0.78rem;color:var(--color-text-muted);margin:0.15rem 0 0;">${esc(item.color)}${item.size ? ' / ' + esc(item.size) : ''}</p>` : ''}
         </div>
-        <span style="font-family:var(--font-display);font-size:0.95rem;font-style:italic;font-weight:300;color:#555;white-space:nowrap;">${formatPrice(item.price * item.qty)}</span>
+        <span style="font-family:var(--font-display);font-size:1.05rem;font-style:italic;font-weight:300;color:#555;white-space:nowrap;">${formatPrice(item.price * item.qty)}</span>
       </div>
     `).join('');
 
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
     const selectedShipping = document.querySelector('input[name="shipping"]:checked');
     const shippingCost = selectedShipping ? parseInt(selectedShipping.dataset.cost) : 0;
+    const giftWrapCost = getGiftWrapCost();
 
     subtotalEl.textContent = formatPrice(subtotal);
     shippingEl.textContent = shippingCost === 0 ? 'Complimentary' : formatPrice(shippingCost);
-    totalEl.textContent = formatPrice(subtotal + shippingCost);
+    totalEl.textContent = formatPrice(subtotal + shippingCost + giftWrapCost);
   }
 
   // Shipping selection
@@ -484,15 +497,50 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   // Gift toggle
   document.getElementById('checkout-gift-toggle').addEventListener('change', (e) => {
     document.getElementById('checkout-gift-area').style.display = e.target.checked ? 'block' : 'none';
+    renderSummary();
   });
 
-  // Place order
+  // Gift wrap checkbox updates total
+  const giftWrapCheck = document.querySelector('#checkout-gift-area input[type="checkbox"]');
+  if (giftWrapCheck) {
+    giftWrapCheck.addEventListener('change', renderSummary);
+  }
+
+  // Place order with validation
   document.getElementById('place-order-btn').addEventListener('click', () => {
     const cart = getCart();
     if (cart.length === 0) {
       alert('Your bag is empty. Add some items before checking out.');
       return;
     }
+
+    const email = document.getElementById('email').value.trim();
+    const firstName = document.getElementById('first-name').value.trim();
+    const lastName = document.getElementById('last-name').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const postcode = document.getElementById('postcode').value.trim();
+
+    if (!email || !firstName || !lastName || !address || !city || !postcode) {
+      alert('Please fill in all required shipping details before placing your order.');
+      const firstEmpty = [
+        document.getElementById('email'),
+        document.getElementById('first-name'),
+        document.getElementById('last-name'),
+        document.getElementById('address'),
+        document.getElementById('city'),
+        document.getElementById('postcode'),
+      ].find(el => !el.value.trim());
+      if (firstEmpty) firstEmpty.focus();
+      return;
+    }
+
+    if (!email.includes('@')) {
+      alert('Please enter a valid email address.');
+      document.getElementById('email').focus();
+      return;
+    }
+
     alert('Thank you for your order! We will be in touch shortly to confirm your purchase.');
     localStorage.removeItem('sbm-cart');
     document.dispatchEvent(new CustomEvent('cart-updated', { detail: { items: [] } }));
