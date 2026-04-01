@@ -2,10 +2,10 @@
 name: "Silk Twill Scarf"
 price: 175
 description: "Printed silk twill scarf with hand-rolled edges. A signature accent for any ensemble."
-image: "https://images.unsplash.com/photo-1601924921557-45e8e0b30b42?w=800&q=80&fit=crop"
+image: "https://images.unsplash.com/photo-1584030373081-f37408c98068?w=800&q=80&fit=crop"
 images:
-  - "https://images.unsplash.com/photo-1601924921557-45e8e0b30b42?w=800&q=80&fit=crop"
   - "https://images.unsplash.com/photo-1584030373081-f37408c98068?w=800&q=80&fit=crop"
+  - "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=80&fit=crop"
 category: "accessories"
 colors:
   - { name: "Floral Ivory", hex: "#FFFFF0" }

@@ -2,11 +2,11 @@
 name: "Cashmere Crew Knit"
 price: 390
 description: "Lightweight cashmere crew-neck in a relaxed fit. The everyday luxury you'll never take off."
-image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80&fit=crop"
+image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80&fit=crop"
 images:
-  - "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80&fit=crop"
   - "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80&fit=crop"
-  - "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80&fit=crop"
+  - "https://images.unsplash.com/photo-1525450824786-227cbef70703?w=800&q=80&fit=crop"
+  - "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80&fit=crop"
 category: "ready-to-wear"
 colors:
   - { name: "Oat", hex: "#E8DCC8" }

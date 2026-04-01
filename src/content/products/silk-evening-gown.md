@@ -2,12 +2,12 @@
 name: "Silk Evening Gown"
 price: 1250
 description: "Floor-length silk gown with a sculpted bodice and flowing train. Made for moments that matter."
-image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&q=80&fit=crop"
+image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80&fit=crop"
 images:
-  - "https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800&q=80&fit=crop"
   - "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800&q=80&fit=crop"
-  - "https://images.unsplash.com/photo-1518622358385-8ea7d0794bf6?w=800&q=80&fit=crop"
-  - "https://images.unsplash.com/photo-1562137369-1a1a0bc66744?w=800&q=80&fit=crop"
+  - "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=800&q=80&fit=crop"
+  - "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80&fit=crop"
+  - "https://images.unsplash.com/photo-1502716119720-b23a1e3f2c55?w=800&q=80&fit=crop"
 category: "evening"
 colors:
   - { name: "Noir", hex: "#1a1a1a" }

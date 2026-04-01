@@ -2,10 +2,10 @@
 name: "Gold Chain Belt"
 price: 245
 description: "Adjustable gold-plated chain belt with interlocking clasp. The finishing detail that elevates everything."
-image: "https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=800&q=80&fit=crop"
+image: "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800&q=80&fit=crop"
 images:
-  - "https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=800&q=80&fit=crop"
   - "https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=800&q=80&fit=crop"
+  - "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=800&q=80&fit=crop"
 category: "accessories"
 colors:
   - { name: "Gold", hex: "#D4AF37" }
