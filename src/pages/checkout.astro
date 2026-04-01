@@ -1,0 +1,503 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Checkout — Styled by Maryam" description="Complete your order">
+  <section class="checkout-page">
+    <div class="container">
+      <a href="/shop" class="back-link reveal">&larr; Continue Shopping</a>
+
+      <div class="checkout-layout">
+        <!-- Form Side -->
+        <div class="checkout-form reveal">
+          <h1>Checkout</h1>
+
+          <!-- Contact -->
+          <fieldset class="form-section">
+            <legend>Contact</legend>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="input-luxury" placeholder="you@example.com" required />
+              </div>
+            </div>
+            <label class="checkbox-row">
+              <input type="checkbox" checked />
+              <span>Email me with news and offers</span>
+            </label>
+          </fieldset>
+
+          <!-- Shipping Address -->
+          <fieldset class="form-section">
+            <legend>Shipping Address</legend>
+            <div class="form-row form-row--2">
+              <div class="form-field">
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" class="input-luxury" placeholder="First name" required />
+              </div>
+              <div class="form-field">
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" class="input-luxury" placeholder="Last name" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="address">Address</label>
+                <input type="text" id="address" class="input-luxury" placeholder="Street address" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="address2">Apartment / Suite (optional)</label>
+                <input type="text" id="address2" class="input-luxury" placeholder="Apt, suite, etc." />
+              </div>
+            </div>
+            <div class="form-row form-row--3">
+              <div class="form-field">
+                <label for="city">City</label>
+                <input type="text" id="city" class="input-luxury" placeholder="City" required />
+              </div>
+              <div class="form-field">
+                <label for="postcode">Postcode</label>
+                <input type="text" id="postcode" class="input-luxury" placeholder="Postcode" required />
+              </div>
+              <div class="form-field">
+                <label for="country">Country</label>
+                <select id="country" class="input-luxury" required>
+                  <option value="GB" selected>United Kingdom</option>
+                  <option value="US">United States</option>
+                  <option value="FR">France</option>
+                  <option value="DE">Germany</option>
+                  <option value="IT">Italy</option>
+                  <option value="AE">United Arab Emirates</option>
+                  <option value="NG">Nigeria</option>
+                  <option value="GH">Ghana</option>
+                  <option value="OTHER">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" class="input-luxury" placeholder="+44 (0) 7000 000000" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Shipping Method -->
+          <fieldset class="form-section">
+            <legend>Shipping Method</legend>
+            <div class="shipping-options" id="shipping-options">
+              <label class="shipping-option is-active">
+                <input type="radio" name="shipping" value="standard" data-cost="0" checked />
+                <div class="shipping-option__info">
+                  <span class="shipping-option__name">Standard Delivery</span>
+                  <span class="shipping-option__time">5–7 business days</span>
+                </div>
+                <span class="shipping-option__price">Complimentary</span>
+              </label>
+              <label class="shipping-option">
+                <input type="radio" name="shipping" value="express" data-cost="15" />
+                <div class="shipping-option__info">
+                  <span class="shipping-option__name">Express Delivery</span>
+                  <span class="shipping-option__time">2–3 business days</span>
+                </div>
+                <span class="shipping-option__price">£15</span>
+              </label>
+              <label class="shipping-option">
+                <input type="radio" name="shipping" value="next-day" data-cost="25" />
+                <div class="shipping-option__info">
+                  <span class="shipping-option__name">Next Day Delivery</span>
+                  <span class="shipping-option__time">Order before 2pm</span>
+                </div>
+                <span class="shipping-option__price">£25</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Gift Note -->
+          <fieldset class="form-section">
+            <legend>Gift Options</legend>
+            <label class="checkbox-row">
+              <input type="checkbox" id="checkout-gift-toggle" />
+              <span>This order is a gift</span>
+            </label>
+            <div class="gift-note-area" id="checkout-gift-area" style="display:none;">
+              <label for="checkout-gift-note" class="sr-only">Gift note</label>
+              <textarea id="checkout-gift-note" class="input-luxury" rows="3" placeholder="Write a personal message for the recipient..."></textarea>
+              <label class="checkbox-row" style="margin-top: 0.75rem;">
+                <input type="checkbox" />
+                <span>Gift wrap this order (+ £5)</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <button class="btn btn--gold checkout-submit" id="place-order-btn">
+            Place Order
+          </button>
+        </div>
+
+        <!-- Order Summary Side -->
+        <div class="order-summary reveal reveal--delay-2">
+          <h2 class="summary-title">Order Summary</h2>
+          <div class="summary-items" id="summary-items">
+            <p class="summary-empty">Your bag is empty.</p>
+          </div>
+
+          <div class="summary-totals" id="summary-totals" style="display:none;">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="summary-subtotal">£0</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span id="summary-shipping">Complimentary</span>
+            </div>
+            <div class="summary-row summary-row--total">
+              <span>Total</span>
+              <span id="summary-total">£0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .checkout-page {
+    padding-top: 7rem;
+    padding-bottom: 5rem;
+  }
+
+  .back-link {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+    display: inline-block;
+    margin-bottom: 2.5rem;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--color-gold); }
+
+  .checkout-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  /* Form */
+  .checkout-form h1 {
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    margin-bottom: 2.5rem;
+  }
+
+  .form-section {
+    border: none;
+    padding: 0;
+    margin-bottom: 2.5rem;
+  }
+
+  .form-section legend {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-black);
+    margin-bottom: 1.25rem;
+    padding: 0;
+  }
+
+  .form-row {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-row--2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-row--3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+
+  .form-field label {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  select.input-luxury {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23999' stroke-width='1'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+    padding-right: 1.5rem;
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+    cursor: pointer;
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--color-gold);
+  }
+
+  .checkbox-row span {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: #666;
+  }
+
+  /* Shipping Options */
+  .shipping-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .shipping-option {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 0.5px solid var(--color-border);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .shipping-option:last-child { border-bottom: none; }
+
+  .shipping-option input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-gold);
+    flex-shrink: 0;
+  }
+
+  .shipping-option__info {
+    flex: 1;
+  }
+
+  .shipping-option__name {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-black);
+    display: block;
+  }
+
+  .shipping-option__time {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+  }
+
+  .shipping-option__price {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--color-black);
+    white-space: nowrap;
+  }
+
+  .gift-note-area {
+    margin-top: 1rem;
+  }
+
+  .gift-note-area textarea {
+    resize: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+  }
+
+  .checkout-submit {
+    width: 100%;
+    text-align: center;
+    padding: 1.15rem;
+    font-size: 0.7rem;
+  }
+
+  /* Order Summary */
+  .order-summary {
+    background: var(--color-bone);
+    padding: 2rem;
+    align-self: start;
+    position: sticky;
+    top: 5rem;
+  }
+
+  .summary-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .summary-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .summary-empty {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: 1.5rem 0;
+  }
+
+  .summary-totals {
+    border-top: 0.5px solid var(--color-border);
+    padding-top: 1.25rem;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+  }
+
+  .summary-row span:first-child {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .summary-row span:last-child {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-black);
+  }
+
+  .summary-row--total {
+    border-top: 0.5px solid var(--color-border);
+    padding-top: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .summary-row--total span:first-child {
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.7rem;
+    color: var(--color-black);
+  }
+
+  .summary-row--total span:last-child {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  @media (max-width: 639px) {
+    .form-row--2 { grid-template-columns: 1fr; }
+    .form-row--3 { grid-template-columns: 1fr; }
+  }
+
+  @media (min-width: 768px) {
+    .checkout-page { padding-top: 9rem; }
+    .checkout-layout {
+      grid-template-columns: 1fr 400px;
+      gap: 4rem;
+    }
+  }
+</style>
+
+<script>
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem('sbm-cart') || '[]'); }
+    catch { return []; }
+  }
+
+  function formatPrice(p) {
+    return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(p);
+  }
+
+  function renderSummary() {
+    const cart = getCart();
+    const itemsEl = document.getElementById('summary-items');
+    const totalsEl = document.getElementById('summary-totals');
+    const subtotalEl = document.getElementById('summary-subtotal');
+    const shippingEl = document.getElementById('summary-shipping');
+    const totalEl = document.getElementById('summary-total');
+
+    if (cart.length === 0) {
+      itemsEl.innerHTML = '<p class="summary-empty">Your bag is empty.</p>';
+      totalsEl.style.display = 'none';
+      return;
+    }
+
+    totalsEl.style.display = 'block';
+
+    itemsEl.innerHTML = cart.map(item => `
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <div style="width:56px;height:70px;background:var(--color-bone);flex-shrink:0;overflow:hidden;position:relative;">
+          ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;">` : ''}
+          <span style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:var(--color-text-muted);color:#fff;font-size:0.55rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-body);">${item.qty}</span>
+        </div>
+        <div style="flex:1;">
+          <p style="font-family:var(--font-body);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;margin:0;color:var(--color-black);">${item.name}</p>
+          ${item.color ? `<p style="font-size:0.7rem;color:var(--color-text-muted);margin:0.15rem 0 0;">${item.color}${item.size ? ' / ' + item.size : ''}</p>` : ''}
+        </div>
+        <span style="font-family:var(--font-display);font-size:0.95rem;font-style:italic;font-weight:300;color:#555;white-space:nowrap;">${formatPrice(item.price * item.qty)}</span>
+      </div>
+    `).join('');
+
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+    const shippingCost = selectedShipping ? parseInt(selectedShipping.dataset.cost) : 0;
+
+    subtotalEl.textContent = formatPrice(subtotal);
+    shippingEl.textContent = shippingCost === 0 ? 'Complimentary' : formatPrice(shippingCost);
+    totalEl.textContent = formatPrice(subtotal + shippingCost);
+  }
+
+  // Shipping selection
+  document.querySelectorAll('input[name="shipping"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      document.querySelectorAll('.shipping-option').forEach(o => o.classList.remove('is-active'));
+      radio.closest('.shipping-option').classList.add('is-active');
+      renderSummary();
+    });
+  });
+
+  // Gift toggle
+  document.getElementById('checkout-gift-toggle').addEventListener('change', (e) => {
+    document.getElementById('checkout-gift-area').style.display = e.target.checked ? 'block' : 'none';
+  });
+
+  // Place order
+  document.getElementById('place-order-btn').addEventListener('click', () => {
+    const cart = getCart();
+    if (cart.length === 0) {
+      alert('Your bag is empty. Add some items before checking out.');
+      return;
+    }
+    alert('Thank you for your order! We will be in touch shortly to confirm your purchase.');
+    localStorage.removeItem('sbm-cart');
+    document.dispatchEvent(new CustomEvent('cart-updated', { detail: { items: [] } }));
+    window.location.href = '/';
+  });
+
+  renderSummary();
+</script>

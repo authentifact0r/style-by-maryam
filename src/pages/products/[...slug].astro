@@ -6,11 +6,11 @@ export async function getStaticPaths() {
   const products = await getCollection('products');
   return products.map(product => ({
     params: { slug: product.id },
-    props: { product },
+    props: { product, allProducts: products },
   }));
 }
 
-const { product } = Astro.props;
+const { product, allProducts } = Astro.props;
 const { Content } = await render(product);
 
 function formatPrice(price) {
@@ -27,6 +27,20 @@ const categoryLabels = {
   'accessories': 'Accessories',
 };
 
+const gallery = product.data.images || (product.data.image ? [product.data.image] : []);
+const colors = product.data.colors || [];
+const sizes = product.data.sizes || [];
+
+// Related products: same category, exclude self, max 4
+const related = allProducts
+  .filter(p => p.data.category === product.data.category && p.id !== product.id)
+  .slice(0, 4);
+
+// Also explore: different category, max 4
+const explore = allProducts
+  .filter(p => p.data.category !== product.data.category)
+  .slice(0, 4);
+
 const productData = JSON.stringify({
   id: product.id,
   name: product.data.name,
@@ -41,23 +55,41 @@ const productData = JSON.stringify({
     <div class="container">
       <nav class="breadcrumb reveal" aria-label="Breadcrumb">
         <a href="/">Home</a>
-        <span class="breadcrumb__sep">/</span>
+        <span class="sep">/</span>
         <a href="/shop">Shop</a>
-        <span class="breadcrumb__sep">/</span>
+        <span class="sep">/</span>
+        <a href={`/shop?cat=${product.data.category}`}>{categoryLabels[product.data.category]}</a>
+        <span class="sep">/</span>
         <span>{product.data.name}</span>
       </nav>
 
       <div class="product-layout">
-        <div class="product-image reveal">
-          {product.data.image ? (
-            <img src={product.data.image} alt={product.data.name} />
-          ) : (
-            <div class="product-image__placeholder">
-              <span class="caption">{product.data.category}</span>
+        <!-- Image Gallery -->
+        <div class="gallery reveal">
+          <div class="gallery__main">
+            <img
+              id="main-image"
+              src={gallery[0] || ''}
+              alt={product.data.name}
+              class="gallery__main-img"
+            />
+          </div>
+          {gallery.length > 1 && (
+            <div class="gallery__thumbs">
+              {gallery.map((img, i) => (
+                <button
+                  class={`gallery__thumb ${i === 0 ? 'is-active' : ''}`}
+                  data-src={img}
+                  aria-label={`View image ${i + 1}`}
+                >
+                  <img src={img} alt={`${product.data.name} view ${i + 1}`} loading="lazy" />
+                </button>
+              ))}
             </div>
           )}
         </div>
 
+        <!-- Product Info -->
         <div class="product-info reveal reveal--delay-2">
           <p class="product-info__category">{categoryLabels[product.data.category]}</p>
           <h1 class="product-info__name">{product.data.name}</h1>
@@ -65,90 +97,218 @@ const productData = JSON.stringify({
           <p class="product-info__price">{formatPrice(product.data.price)}</p>
           <p class="product-info__desc">{product.data.description}</p>
 
+          <!-- Color Selector -->
+          {colors.length > 0 && (
+            <div class="variant-group">
+              <label class="variant-label">Colour — <span id="color-name">{colors[0].name}</span></label>
+              <div class="color-swatches">
+                {colors.map((c, i) => (
+                  <button
+                    class={`swatch ${i === 0 ? 'is-active' : ''}`}
+                    style={`background:${c.hex};`}
+                    data-color={c.name}
+                    aria-label={c.name}
+                  >
+                    {c.hex === '#FFFFF0' || c.hex === '#F5F0E1' || c.hex === '#E8DCC8' || c.hex === '#F7E7CE' ? (
+                      <span class="swatch__border"></span>
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <!-- Size Selector -->
+          {sizes.length > 0 && sizes[0] !== 'One Size' && (
+            <div class="variant-group">
+              <label class="variant-label">Size</label>
+              <div class="size-options">
+                {sizes.map((s, i) => (
+                  <button class={`size-btn ${i === 0 ? 'is-active' : ''}`} data-size={s}>
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {sizes.length > 0 && sizes[0] === 'One Size' && (
+            <div class="variant-group">
+              <label class="variant-label">Size — One Size</label>
+            </div>
+          )}
+
+          <!-- Add to Bag -->
           {product.data.soldOut ? (
-            <span class="btn product-info__sold-out">Sold Out</span>
+            <button class="btn product-info__sold-out" disabled>Sold Out</button>
           ) : (
-            <button
-              class="btn btn--filled add-to-bag-btn"
-              data-product={productData}
-            >
+            <button class="btn btn--filled add-to-bag-btn" data-product={productData}>
               Add to Bag
             </button>
           )}
 
-          <div class="product-body prose">
-            <Content />
+          <div class="product-details-accordion">
+            <details>
+              <summary>Product Details</summary>
+              <div class="prose details-content">
+                <Content />
+              </div>
+            </details>
+            <details>
+              <summary>Shipping & Returns</summary>
+              <div class="details-content">
+                <p>Complimentary standard shipping on all orders over £200. Express delivery available at checkout. Returns accepted within 14 days of delivery — items must be unworn with tags attached.</p>
+              </div>
+            </details>
           </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- You May Also Like -->
+  {related.length > 0 && (
+    <section class="section related-section">
+      <div class="container">
+        <div class="text-center">
+          <p class="caption reveal">Complete the Look</p>
+          <div class="accent-line reveal reveal--delay-1" style="margin: 1rem auto;"></div>
+          <h2 class="reveal reveal--delay-2">You May Also Like</h2>
+        </div>
+        <div class="related-grid">
+          {related.map((item, i) => (
+            <a href={`/products/${item.id}`} class={`related-card reveal reveal--delay-${i + 1}`}>
+              <div class="related-card__image">
+                {item.data.image ? (
+                  <img src={item.data.image} alt={item.data.name} loading="lazy" />
+                ) : (
+                  <span class="caption">{item.data.category}</span>
+                )}
+              </div>
+              <h3>{item.data.name}</h3>
+              <span class="related-card__price">{formatPrice(item.data.price)}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Explore More -->
+  {explore.length > 0 && (
+    <section class="section explore-section">
+      <div class="container">
+        <div class="text-center">
+          <p class="caption reveal">Discover</p>
+          <div class="accent-line reveal reveal--delay-1" style="margin: 1rem auto;"></div>
+          <h2 class="reveal reveal--delay-2">Explore More</h2>
+        </div>
+        <div class="related-grid">
+          {explore.map((item, i) => (
+            <a href={`/products/${item.id}`} class={`related-card reveal reveal--delay-${i + 1}`}>
+              <div class="related-card__image">
+                {item.data.image ? (
+                  <img src={item.data.image} alt={item.data.name} loading="lazy" />
+                ) : (
+                  <span class="caption">{item.data.category}</span>
+                )}
+              </div>
+              <h3>{item.data.name}</h3>
+              <span class="related-card__price">{formatPrice(item.data.price)}</span>
+            </a>
+          ))}
+        </div>
+        <div class="text-center reveal" style="margin-top: 3rem;">
+          <a href="/shop" class="btn">View All Products</a>
+        </div>
+      </div>
+    </section>
+  )}
 </BaseLayout>
 
 <style>
   .product-detail {
     padding-top: 7rem;
-    padding-bottom: 5rem;
+    padding-bottom: 4rem;
   }
 
   .breadcrumb {
     font-family: var(--font-body);
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     color: var(--color-text-muted);
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
   }
 
-  .breadcrumb a {
-    color: var(--color-text-muted);
-    transition: color 0.2s;
-  }
-
-  .breadcrumb a:hover {
-    color: var(--color-gold);
-  }
-
-  .breadcrumb__sep {
-    margin: 0 0.5rem;
-    color: #ddd;
-  }
+  .breadcrumb a { color: var(--color-text-muted); transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--color-gold); }
+  .sep { margin: 0 0.4rem; color: #ddd; }
 
   .product-layout {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2.5rem;
   }
 
-  .product-image img {
-    width: 100%;
+  /* Gallery */
+  .gallery__main {
     aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--color-bone);
+  }
+
+  .gallery__main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s var(--ease-luxury);
+  }
+
+  .gallery__thumbs {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .gallery__thumb {
+    width: 64px;
+    height: 80px;
+    overflow: hidden;
+    border: 1.5px solid transparent;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s, border-color 0.3s;
+  }
+
+  .gallery__thumb.is-active {
+    opacity: 1;
+    border-color: var(--color-black);
+  }
+
+  .gallery__thumb:hover { opacity: 1; }
+
+  .gallery__thumb img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 
-  .product-image__placeholder {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    background: linear-gradient(180deg, #f0ece6 0%, #e5dfd6 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
+  /* Product Info */
   .product-info__category {
     font-family: var(--font-body);
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.25em;
     color: var(--color-text-muted);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .product-info__name {
-    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-    letter-spacing: 0.02em;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
     margin-bottom: 0;
   }
 
@@ -157,44 +317,281 @@ const productData = JSON.stringify({
     font-size: 1.3rem;
     font-style: italic;
     font-weight: 300;
-    color: #666;
-    margin: 1.5rem 0;
+    color: #555;
+    margin: 1.25rem 0 1rem;
   }
 
   .product-info__desc {
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
+    line-height: 1.7;
   }
 
   .product-info__sold-out {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
+  }
+
+  /* Variants */
+  .variant-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .variant-label {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-text-muted);
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .variant-label span {
+    color: var(--color-black);
+  }
+
+  /* Color Swatches */
+  .color-swatches {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s, transform 0.2s;
+    padding: 0;
+  }
+
+  .swatch.is-active {
+    border-color: var(--color-black);
+    transform: scale(1.1);
+  }
+
+  .swatch:hover { transform: scale(1.1); }
+
+  .swatch__border {
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
     pointer-events: none;
   }
 
-  .product-body {
-    margin-top: 3rem;
-    padding-top: 2rem;
+  /* Size Options */
+  .size-options {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .size-btn {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s var(--ease-luxury);
+    color: var(--color-text);
+  }
+
+  .size-btn.is-active,
+  .size-btn:hover {
+    border-color: var(--color-black);
+    background: var(--color-black);
+    color: var(--color-white);
+  }
+
+  /* Add to Bag */
+  .add-to-bag-btn {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.1rem 2rem;
+  }
+
+  /* Accordion */
+  .product-details-accordion {
     border-top: 0.5px solid var(--color-border);
+  }
+
+  .product-details-accordion details {
+    border-bottom: 0.5px solid var(--color-border);
+  }
+
+  .product-details-accordion summary {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 1.25rem 0;
+    cursor: pointer;
+    color: var(--color-text);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-details-accordion summary::-webkit-details-marker { display: none; }
+
+  .product-details-accordion summary::after {
+    content: '+';
+    font-size: 1rem;
+    font-weight: 300;
+    transition: transform 0.3s;
+  }
+
+  .product-details-accordion details[open] summary::after {
+    content: '−';
+  }
+
+  .details-content {
+    padding-bottom: 1.5rem;
+  }
+
+  .details-content p {
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+
+  /* Related / Explore Grid */
+  .related-section {
+    background: var(--color-bone);
+  }
+
+  .explore-section {
+    background: var(--color-white);
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .related-card {
+    display: block;
+  }
+
+  .related-card__image {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: linear-gradient(180deg, #f0ece6 0%, #e5dfd6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .related-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease-luxury);
+  }
+
+  .related-card:hover .related-card__image img {
+    transform: scale(1.04);
+  }
+
+  .related-card h3 {
+    font-size: 0.7rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .related-card__price {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-style: italic;
+    font-weight: 300;
+    color: #888;
   }
 
   @media (min-width: 768px) {
     .product-layout {
       grid-template-columns: 1fr 1fr;
-      gap: 5rem;
+      gap: 4rem;
       align-items: start;
     }
 
     .product-detail {
       padding-top: 9rem;
-      padding-bottom: 7rem;
+      padding-bottom: 5rem;
+    }
+
+    .gallery__thumb {
+      width: 72px;
+      height: 90px;
+    }
+
+    .related-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
     }
   }
 </style>
 
 <script>
+  // Gallery
+  const mainImg = document.getElementById('main-image');
+  const thumbs = document.querySelectorAll('.gallery__thumb');
+
+  thumbs.forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      thumbs.forEach(t => t.classList.remove('is-active'));
+      thumb.classList.add('is-active');
+      if (mainImg) {
+        mainImg.style.opacity = '0';
+        setTimeout(() => {
+          mainImg.src = thumb.dataset.src;
+          mainImg.style.opacity = '1';
+        }, 150);
+      }
+    });
+  });
+
+  // Color swatches
+  const swatches = document.querySelectorAll('.swatch');
+  const colorName = document.getElementById('color-name');
+
+  swatches.forEach(s => {
+    s.addEventListener('click', () => {
+      swatches.forEach(sw => sw.classList.remove('is-active'));
+      s.classList.add('is-active');
+      if (colorName) colorName.textContent = s.dataset.color;
+    });
+  });
+
+  // Size buttons
+  const sizeBtns = document.querySelectorAll('.size-btn');
+  sizeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      sizeBtns.forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+    });
+  });
+
+  // Add to Bag
   document.querySelectorAll('.add-to-bag-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const product = JSON.parse(btn.dataset.product);
+      const activeColor = document.querySelector('.swatch.is-active');
+      const activeSize = document.querySelector('.size-btn.is-active');
+      if (activeColor) product.color = activeColor.dataset.color;
+      if (activeSize) product.size = activeSize.dataset.size;
+      product.id = `${product.id}-${product.color || 'default'}-${product.size || 'default'}`;
       if (window.addToCart) window.addToCart(product);
     });
   });

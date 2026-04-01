@@ -28,7 +28,12 @@ collections:
       - { label: "Product Name", name: "name", widget: "string" }
       - { label: "Price (£)", name: "price", widget: "number", value_type: "int" }
       - { label: "Short Description", name: "description", widget: "string" }
-      - { label: "Product Image", name: "image", widget: "image", required: false }
+      - { label: "Main Image", name: "image", widget: "image", required: false }
+      - label: "Gallery Images"
+        name: "images"
+        widget: "list"
+        required: false
+        field: { label: "Image", name: "image", widget: "image" }
       - label: "Category"
         name: "category"
         widget: "select"
@@ -36,6 +41,18 @@ collections:
           - { label: "Evening", value: "evening" }
           - { label: "Ready-to-Wear", value: "ready-to-wear" }
           - { label: "Accessories", value: "accessories" }
+      - label: "Colours"
+        name: "colors"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Colour Name", name: "name", widget: "string" }
+          - { label: "Hex Code", name: "hex", widget: "string" }
+      - label: "Sizes"
+        name: "sizes"
+        widget: "list"
+        required: false
+        field: { label: "Size", name: "size", widget: "string" }
       - { label: "Featured", name: "featured", widget: "boolean", default: false }
       - { label: "Sold Out", name: "soldOut", widget: "boolean", default: false }
       - { label: "Publish Date", name: "publishDate", widget: "datetime" }

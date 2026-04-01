@@ -17,7 +17,13 @@ const products = defineCollection({
     price: z.number(),
     description: z.string(),
     image: z.string().optional(),
+    images: z.array(z.string()).optional(),
     category: z.enum(['evening', 'ready-to-wear', 'accessories']),
+    colors: z.array(z.object({
+      name: z.string(),
+      hex: z.string(),
+    })).optional(),
+    sizes: z.array(z.string()).optional(),
     featured: z.boolean().default(false),
     soldOut: z.boolean().default(false),
     publishDate: z.coerce.date(),
