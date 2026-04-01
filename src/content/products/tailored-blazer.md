@@ -2,11 +2,11 @@
 name: "Structured Wool Blazer"
 price: 680
 description: "Double-breasted wool blazer with a nipped waist and gold-tone buttons. The foundation of any considered wardrobe."
-image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80&fit=crop"
+image: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=800&q=80&fit=crop"
 images:
-  - "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80&fit=crop"
-  - "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&q=80&fit=crop"
   - "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=800&q=80&fit=crop"
+  - "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80&fit=crop"
+  - "https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=800&q=80&fit=crop"
 category: "ready-to-wear"
 colors:
   - { name: "Black", hex: "#111111" }
