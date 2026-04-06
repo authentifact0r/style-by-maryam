@@ -222,10 +222,9 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
       </div>
     </div>
   </section>
-</BaseLayout>
 
-<!-- Stripe.js loaded before main script -->
-<script is:inline src="https://js.stripe.com/v3/"></script>
+  <!-- Stripe.js must be inside body -->
+  <script is:inline src="https://js.stripe.com/v3/"></script>
 
 <style>
   .checkout-page {
@@ -784,3 +783,4 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
   // but event listeners and Stripe need to wait
   initCheckout();
 </script>
+</BaseLayout>
