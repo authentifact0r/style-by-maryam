@@ -506,8 +506,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     giftWrapCheck.addEventListener('change', renderSummary);
   }
 
-  // Place order with validation
-  document.getElementById('place-order-btn').addEventListener('click', () => {
+  // Place order — validate and redirect to Stripe
+  const placeOrderBtn = document.getElementById('place-order-btn');
+  let isSubmitting = false;
+
+  placeOrderBtn.addEventListener('click', async () => {
+    if (isSubmitting) return;
+
     const cart = getCart();
     if (cart.length === 0) {
       alert('Your bag is empty. Add some items before checking out.');
@@ -520,6 +525,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const address = document.getElementById('address').value.trim();
     const city = document.getElementById('city').value.trim();
     const postcode = document.getElementById('postcode').value.trim();
+    const country = document.getElementById('country').value;
+    const phone = document.getElementById('phone').value.trim();
 
     if (!email || !firstName || !lastName || !address || !city || !postcode) {
       alert('Please fill in all required shipping details before placing your order.');
@@ -541,10 +548,76 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       return;
     }
 
-    alert('Thank you for your order! We will be in touch shortly to confirm your purchase.');
-    localStorage.removeItem('sbm-cart');
-    document.dispatchEvent(new CustomEvent('cart-updated', { detail: { items: [] } }));
-    window.location.href = '/';
+    // Get shipping info
+    const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+    const shippingCost = selectedShipping ? parseInt(selectedShipping.dataset.cost) : 0;
+    const shippingMethod = selectedShipping ? selectedShipping.value : 'standard';
+    const shippingLabels = { standard: 'Standard', express: 'Express', 'next-day': 'Next Day' };
+
+    // Gift options
+    const giftToggle = document.getElementById('checkout-gift-toggle');
+    const giftWrapEl = document.querySelector('#checkout-gift-area input[type="checkbox"]');
+    const giftNoteEl = document.getElementById('checkout-gift-note');
+    const isGift = giftToggle && giftToggle.checked;
+    const giftWrap = isGift && giftWrapEl && giftWrapEl.checked;
+    const giftNote = isGift && giftNoteEl ? giftNoteEl.value.trim() : '';
+
+    // Show loading state
+    isSubmitting = true;
+    placeOrderBtn.textContent = 'Redirecting to payment...';
+    placeOrderBtn.style.opacity = '0.6';
+    placeOrderBtn.style.pointerEvents = 'none';
+
+    try {
+      const res = await fetch('https://authentifactor.com/api/storefront/checkout?tenant=styled-by-maryam', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart.map(item => ({
+            name: item.name,
+            price: item.price,
+            qty: item.qty,
+            image: item.image,
+            variant: [item.color, item.size].filter(Boolean).join(' / ') || undefined,
+          })),
+          customer: {
+            email,
+            firstName,
+            lastName,
+            address,
+            city,
+            postcode,
+            country,
+            phone,
+          },
+          shipping: {
+            method: shippingLabels[shippingMethod] || shippingMethod,
+            cost: shippingCost,
+          },
+          giftWrap,
+          giftNote,
+          successUrl: window.location.origin + '/checkout/success',
+          cancelUrl: window.location.origin + '/checkout',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Checkout failed');
+      }
+
+      // Clear cart and redirect to Stripe
+      localStorage.removeItem('sbm-cart');
+      document.dispatchEvent(new CustomEvent('cart-updated', { detail: { items: [] } }));
+      window.location.href = data.url;
+    } catch (err) {
+      alert('Something went wrong: ' + (err.message || 'Please try again.'));
+      isSubmitting = false;
+      placeOrderBtn.textContent = 'Place Order';
+      placeOrderBtn.style.opacity = '1';
+      placeOrderBtn.style.pointerEvents = 'auto';
+    }
   });
 
   renderSummary();
