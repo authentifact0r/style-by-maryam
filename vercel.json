@@ -1,4 +1,9 @@
 {
+  "redirects": [
+    { "source": "/admin", "destination": "https://authentifactor.com/admin?tenant=styled-by-maryam", "permanent": false },
+    { "source": "/admin/:path*", "destination": "https://authentifactor.com/admin/:path*?tenant=styled-by-maryam", "permanent": false },
+    { "source": "/login", "destination": "https://authentifactor.com/login?tenant=styled-by-maryam", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/(.*)",
