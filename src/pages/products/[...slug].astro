@@ -113,7 +113,7 @@ const avgRating = (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.lengt
 const ratingCounts = [5,4,3,2,1].map(n => ({ stars: n, count: reviews.filter(r => r.rating === n).length }));
 ---
 
-<BaseLayout title={`${product.data.name} — Styled by Maryam`} description={product.data.description}>
+<BaseLayout title={`${product.data.name} — Styled by Maryam`} description={product.data.description} ogImage={product.data.image || undefined}>
   <section class="product-detail">
     <div class="container">
       <nav class="breadcrumb reveal" aria-label="Breadcrumb">
