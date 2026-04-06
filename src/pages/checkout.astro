@@ -133,16 +133,52 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
             </div>
           </fieldset>
 
-          <!-- Payment — Stripe Elements -->
+          <!-- Payment -->
           <fieldset class="form-section">
             <legend>Payment</legend>
-            <div class="payment-card-wrapper">
-              <div class="card-icons">
-                <svg viewBox="0 0 38 24" class="card-icon"><rect width="38" height="24" rx="3" fill="#1A1F71"/><path d="M15.6 16.8h-2.5L14.8 7.2h2.5L15.6 16.8z" fill="#fff"/><path d="M24.3 7.5c-.5-.2-1.3-.4-2.2-.4-2.5 0-4.2 1.3-4.2 3.2 0 1.4 1.2 2.2 2.2 2.6 1 .5 1.3.8 1.3 1.2 0 .6-.8 1-1.5 1-.9 0-1.5-.1-2.2-.5l-.3-.2-.3 2c.6.3 1.6.5 2.7.5 2.6 0 4.3-1.3 4.3-3.3 0-1.1-.7-1.9-2.1-2.6-.9-.4-1.4-.7-1.4-1.2 0-.4.5-.8 1.4-.8.8 0 1.4.2 1.9.4l.2.1.3-1.9z" fill="#fff"/><path d="M28 7.2h-1.9c-.6 0-1 .2-1.3.8l-3.6 8.8h2.6l.5-1.4h3.1l.3 1.4h2.3L28 7.2zm-2.8 6.2l1-2.8.5 2.8h-1.5z" fill="#fff"/><path d="M12.6 7.2L10.1 13.6 9.8 12c-.5-1.7-2.1-3.6-3.9-4.5l2.2 9.2h2.6l3.9-9.5h-2z" fill="#fff"/><path d="M7.4 7.2H3.5l0 .2C6.5 8.1 8.5 10 9.2 12.3l-.9-4.3c-.1-.6-.6-.8-1-.8z" fill="#F9A533"/></svg>
-                <svg viewBox="0 0 38 24" class="card-icon"><rect width="38" height="24" rx="3" fill="#fff" stroke="#ddd"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 7.3a7 7 0 010 9.4 7 7 0 000-9.4z" fill="#FF5F00"/></svg>
-                <svg viewBox="0 0 38 24" class="card-icon"><rect width="38" height="24" rx="3" fill="#006FCF"/><path d="M7 12.5h2.5L8.3 10 7 12.5zm13-5.3v9.6h2.6l.3-1h2.5l.3 1H28l-2.3-9.6h-2.3c-.5 0-.9.3-1 .7l-3.3 8.9V7.2h-3.4l-1.6 4-1.6-4H9l0 9.6h1.9V9.4l1.8 7.4h1.4l1.8-7.4v7.4h4.3l.4-1h3l.4 1h2.2V7.2H20z" fill="#fff"/></svg>
+
+            <!-- Express payment buttons -->
+            <div class="express-pay-row">
+              <button type="button" class="express-pay-btn" id="apple-pay-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+                Pay
+              </button>
+              <button type="button" class="express-pay-btn" id="google-pay-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Pay
+              </button>
+              <button type="button" class="express-pay-btn" id="paypal-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 01-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797H9.283c-.521 0-.963.378-1.045.89l-1.162 7.116z"/></svg>
+                PayPal
+              </button>
+            </div>
+
+            <div class="pay-divider">
+              <hr />
+              <span>or pay using credit card</span>
+              <hr />
+            </div>
+
+            <!-- Card form with individual Stripe Elements -->
+            <div class="card-form">
+              <div class="card-form__field">
+                <label for="cardholder-name">Card holder full name</label>
+                <input type="text" id="cardholder-name" class="input-luxury" placeholder="Enter your full name" />
               </div>
-              <div id="card-element" class="stripe-card-element"></div>
+              <div class="card-form__field">
+                <label>Card Number</label>
+                <div id="stripe-card-number" class="stripe-input"></div>
+              </div>
+              <div class="card-form__row">
+                <div class="card-form__field">
+                  <label>Expiry Date</label>
+                  <div id="stripe-card-expiry" class="stripe-input"></div>
+                </div>
+                <div class="card-form__field">
+                  <label>CVV</label>
+                  <div id="stripe-card-cvc" class="stripe-input"></div>
+                </div>
+              </div>
               <div id="card-errors" class="card-errors" role="alert"></div>
             </div>
           </fieldset>
@@ -295,51 +331,104 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
   .gift-note-area textarea { resize: none; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 
-  /* Payment section */
-  .payment-card-wrapper {
-    background: #fafaf8;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    padding: 1.25rem;
+  /* Express pay buttons */
+  .express-pay-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
-  .card-icons {
+  .express-pay-btn {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .card-icon {
-    width: 38px;
-    height: 24px;
-  }
-
-  .stripe-card-element {
-    padding: 14px 12px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    height: 48px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
     background: #fff;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-black);
+    transition: all 0.2s;
+    padding: 0;
+  }
+
+  .express-pay-btn:hover {
+    border-color: var(--color-black);
+    background: #fafafa;
+  }
+
+  .pay-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .pay-divider hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .pay-divider span {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+
+  /* Card form */
+  .card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .card-form__field label {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .card-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .stripe-input {
+    padding: 12px;
     border: 1px solid var(--color-border);
     border-radius: 4px;
+    background: #fff;
     min-height: 44px;
     transition: border-color 0.2s;
   }
 
-  .stripe-card-element.StripeElement--focus {
+  .stripe-input.StripeElement--focus {
     border-color: var(--color-gold);
+    box-shadow: 0 0 0 1px var(--color-gold);
   }
 
-  .stripe-card-element.StripeElement--invalid {
+  .stripe-input.StripeElement--invalid {
     border-color: #e25950;
-  }
-
-  .stripe-card-element iframe {
-    height: 100% !important;
   }
 
   .card-errors {
     font-family: var(--font-body);
     font-size: 0.75rem;
     color: #e25950;
-    margin-top: 0.5rem;
     min-height: 1.2em;
   }
 
@@ -421,25 +510,33 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
 </style>
 
 <script is:inline define:vars={{ STRIPE_PUBLIC_KEY }}>
-  // ---- Stripe setup ----
-  const stripeInstance = Stripe(STRIPE_PUBLIC_KEY);
-  const elements = stripeInstance.elements();
-  const cardElement = elements.create('card', {
-    style: {
-      base: {
-        fontFamily: '"Inter", "Helvetica Neue", sans-serif',
-        fontSize: '15px',
-        color: '#1a1a1a',
-        '::placeholder': { color: '#aaa' },
-      },
-      invalid: { color: '#e25950' },
-    },
-  });
-  cardElement.mount('#card-element');
+  // ---- Stripe setup (individual elements) ----
+  var stripeInstance = Stripe(STRIPE_PUBLIC_KEY);
+  var elements = stripeInstance.elements();
 
-  cardElement.on('change', (event) => {
-    const errEl = document.getElementById('card-errors');
-    errEl.textContent = event.error ? event.error.message : '';
+  var elementStyle = {
+    base: {
+      fontFamily: '"Inter", "Helvetica Neue", sans-serif',
+      fontSize: '15px',
+      color: '#1a1a1a',
+      '::placeholder': { color: '#bbb' },
+    },
+    invalid: { color: '#e25950' },
+  };
+
+  var cardNumberElement = elements.create('cardNumber', { style: elementStyle, placeholder: '0000 0000 0000 0000' });
+  var cardExpiryElement = elements.create('cardExpiry', { style: elementStyle, placeholder: 'MM / YY' });
+  var cardCvcElement = elements.create('cardCvc', { style: elementStyle, placeholder: 'CVV' });
+
+  cardNumberElement.mount('#stripe-card-number');
+  cardExpiryElement.mount('#stripe-card-expiry');
+  cardCvcElement.mount('#stripe-card-cvc');
+
+  [cardNumberElement, cardExpiryElement, cardCvcElement].forEach(function(el) {
+    el.on('change', function(event) {
+      var errEl = document.getElementById('card-errors');
+      errEl.textContent = event.error ? event.error.message : '';
+    });
   });
 
   // ---- Cart helpers ----
@@ -629,7 +726,7 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
       // Step 2: Confirm payment with Stripe.js
       var result = await stripeInstance.confirmCardPayment(data.clientSecret, {
         payment_method: {
-          card: cardElement,
+          card: cardNumberElement,
           billing_details: {
             name: firstName + ' ' + lastName,
             email: email,
