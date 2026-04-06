@@ -48,6 +48,69 @@ const productData = JSON.stringify({
   image: product.data.image || '',
   category: product.data.category,
 });
+
+// Fit details — per-product overrides possible via frontmatter, fallback for dresses
+const isSoleil = product.id.includes('soleil');
+const isDress = product.data.category === 'evening';
+const fitDetails = isDress ? [
+  { label: 'Bust', icon: '👗', value: isSoleil ? 'Great for any cup size.' : 'Standard fit through bust.' },
+  { label: 'Waist', icon: '📐', value: isSoleil ? 'Fitted — very fitted at natural waist.' : 'Fitted at natural waist.' },
+  { label: 'Hip', icon: '✨', value: isSoleil ? 'Loosely fitted.' : 'Relaxed through hip.' },
+  { label: 'Undergarments', icon: '🩱', value: isSoleil ? 'May be worn with a strapless bra, adhesive bra, petals, or no bra.' : 'Standard undergarments recommended.' },
+  { label: 'Fabric', icon: '🧵', value: isSoleil ? 'Fabric has no stretch.' : 'Minimal stretch.' },
+  { label: 'Length', icon: '📏', value: isSoleil ? 'Mid-thigh. Size M measures approximately 35" from shoulder to hem.' : 'Standard length for category.' },
+] : null;
+
+// Sample reviews data
+const reviews = [
+  {
+    name: 'Amara K.',
+    rating: 5,
+    date: '2026-03-18',
+    title: 'Absolutely stunning',
+    body: 'The quality of this dress is incredible — the fabric has a beautiful weight and the tailoring is impeccable. I wore this to a cocktail event and received so many compliments. True to size.',
+    fit: 'True to Size',
+    size: 'S',
+    color: 'Lemon Sorbet',
+    image: gallery[0] || null,
+  },
+  {
+    name: 'Sophie R.',
+    rating: 5,
+    date: '2026-03-12',
+    title: 'A showstopper',
+    body: 'I\'ve been eyeing this dress for weeks and finally pulled the trigger. It did not disappoint! The one-shoulder silhouette is so flattering and the colour is even more vibrant in person.',
+    fit: 'True to Size',
+    size: 'M',
+    color: 'Lemon Sorbet',
+    image: gallery[1] || null,
+  },
+  {
+    name: 'Priya M.',
+    rating: 4,
+    date: '2026-02-28',
+    title: 'Beautiful but runs small',
+    body: 'Gorgeous dress, the construction is top-notch. I would say it runs slightly small — I\'m usually between S and M and the M fits perfectly. Size up if you\'re between sizes.',
+    fit: 'Runs a Little Small',
+    size: 'M',
+    color: 'Lemon Sorbet',
+    image: null,
+  },
+  {
+    name: 'Olivia T.',
+    rating: 5,
+    date: '2026-02-15',
+    title: 'Worth every penny',
+    body: 'The attention to detail on this piece is remarkable. From the invisible zipper to the boning in the bodice — you can feel the craftsmanship. The yellow is so chic for spring.',
+    fit: 'True to Size',
+    size: 'XS',
+    color: 'Lemon Sorbet',
+    image: gallery[2] || null,
+  },
+];
+
+const avgRating = (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1);
+const ratingCounts = [5,4,3,2,1].map(n => ({ stars: n, count: reviews.filter(r => r.rating === n).length }));
 ---
 
 <BaseLayout title={`${product.data.name} — Styled by Maryam`} description={product.data.description}>
@@ -66,13 +129,14 @@ const productData = JSON.stringify({
       <div class="product-layout">
         <!-- Image Gallery -->
         <div class="gallery reveal">
-          <div class="gallery__main">
+          <div class="gallery__main" id="gallery-zoom-container">
             <img
               id="main-image"
               src={gallery[0] || ''}
               alt={product.data.name}
               class="gallery__main-img"
             />
+            <div class="gallery__zoom-lens" id="zoom-lens"></div>
           </div>
           {gallery.length > 1 && (
             <div class="gallery__thumbs">
@@ -154,6 +218,25 @@ const productData = JSON.stringify({
                 <Content />
               </div>
             </details>
+
+            <!-- Fit Guide -->
+            {fitDetails && (
+              <details>
+                <summary>Fit Guide</summary>
+                <div class="details-content fit-guide">
+                  {fitDetails.map(fd => (
+                    <div class="fit-row">
+                      <div class="fit-row__label">
+                        <span class="fit-row__icon">{fd.icon}</span>
+                        <span class="fit-row__name">{fd.label}</span>
+                      </div>
+                      <p class="fit-row__value">{fd.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            )}
+
             <details>
               <summary>Shipping & Returns</summary>
               <div class="details-content">
@@ -162,6 +245,109 @@ const productData = JSON.stringify({
             </details>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Customer Reviews -->
+  <section class="section reviews-section">
+    <div class="container">
+      <div class="text-center">
+        <p class="caption reveal">What Our Customers Say</p>
+        <div class="accent-line reveal reveal--delay-1" style="margin: 1rem auto;"></div>
+        <h2 class="reveal reveal--delay-2">Customer Reviews</h2>
+      </div>
+
+      <div class="reviews-overview reveal">
+        <!-- Rating Summary -->
+        <div class="reviews-summary">
+          <div class="reviews-summary__score">
+            <span class="reviews-summary__number">{avgRating}</span>
+            <div class="reviews-summary__stars">
+              {[1,2,3,4,5].map(s => (
+                <span class={`star ${s <= Math.round(parseFloat(avgRating)) ? 'star--filled' : ''}`}>★</span>
+              ))}
+            </div>
+            <span class="reviews-summary__count">{reviews.length} Reviews</span>
+          </div>
+          <div class="reviews-summary__bars">
+            {ratingCounts.map(rc => (
+              <div class="rating-bar">
+                <span class="rating-bar__label">{rc.stars} Stars</span>
+                <div class="rating-bar__track">
+                  <div class="rating-bar__fill" style={`width: ${reviews.length > 0 ? (rc.count / reviews.length) * 100 : 0}%`}></div>
+                </div>
+                <span class="rating-bar__count">{rc.count}</span>
+              </div>
+            ))}
+          </div>
+          <div class="reviews-summary__fit">
+            <span class="reviews-summary__fit-label">Fit: True to Size</span>
+            <div class="fit-scale">
+              <div class="fit-scale__track">
+                <div class="fit-scale__marker" style="left: 50%;"></div>
+              </div>
+              <div class="fit-scale__labels">
+                <span>Runs Small</span>
+                <span>True to Size</span>
+                <span>Runs Large</span>
+              </div>
+            </div>
+            <span class="reviews-summary__basis">Based on {reviews.length} Reviews</span>
+          </div>
+        </div>
+
+        <!-- Customer Images -->
+        {gallery.length > 0 && (
+          <div class="customer-images">
+            <div class="customer-images__header">
+              <h3>Customer Images</h3>
+              <span class="customer-images__count">View All ({gallery.length}) Photos</span>
+            </div>
+            <div class="customer-images__grid">
+              {gallery.map((img, i) => (
+                <div class="customer-images__item" data-src={img}>
+                  <img src={img} alt={`Customer photo ${i + 1}`} loading="lazy" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <!-- Individual Reviews -->
+      <div class="reviews-list reveal">
+        <div class="reviews-list__controls">
+          <span class="reviews-list__sort">Sort By: <strong>Featured</strong></span>
+        </div>
+
+        {reviews.map(review => (
+          <div class="review-card">
+            <div class="review-card__header">
+              <div class="review-card__stars">
+                {[1,2,3,4,5].map(s => (
+                  <span class={`star ${s <= review.rating ? 'star--filled' : ''}`}>★</span>
+                ))}
+              </div>
+              <span class="review-card__date">{new Date(review.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+            </div>
+            <h4 class="review-card__title">{review.title}</h4>
+            <p class="review-card__body">{review.body}</p>
+            {review.image && (
+              <div class="review-card__image">
+                <img src={review.image} alt={`Review by ${review.name}`} loading="lazy" />
+              </div>
+            )}
+            <div class="review-card__footer">
+              <span class="review-card__name">{review.name}</span>
+              <div class="review-card__tags">
+                {review.fit && <span class="review-tag">Fit: {review.fit}</span>}
+                {review.size && <span class="review-tag">Size: {review.size}</span>}
+                {review.color && <span class="review-tag">Color: {review.color}</span>}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -252,18 +438,29 @@ const productData = JSON.stringify({
     gap: 2.5rem;
   }
 
-  /* Gallery */
+  /* Gallery with zoom */
   .gallery__main {
     aspect-ratio: 4 / 5;
     overflow: hidden;
     background: var(--color-bone);
+    position: relative;
+    cursor: crosshair;
   }
 
   .gallery__main-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: opacity 0.3s var(--ease-luxury);
+    transition: transform 0.4s var(--ease-luxury), opacity 0.3s var(--ease-luxury);
+    transform-origin: center center;
+  }
+
+  .gallery__main:hover .gallery__main-img {
+    transform: scale(1.8);
+  }
+
+  .gallery__zoom-lens {
+    display: none;
   }
 
   .gallery__thumbs {
@@ -314,11 +511,12 @@ const productData = JSON.stringify({
 
   .product-info__price {
     font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-style: italic;
-    font-weight: 300;
-    color: #555;
-    margin: 1.25rem 0 1rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    font-style: normal;
+    color: var(--color-black);
+    margin: 1rem 0 0.5rem;
+    letter-spacing: -0.02em;
   }
 
   .product-info__desc {
@@ -453,7 +651,7 @@ const productData = JSON.stringify({
   }
 
   .product-details-accordion details[open] summary::after {
-    content: '−';
+    content: '\2212';
   }
 
   .details-content {
@@ -463,6 +661,372 @@ const productData = JSON.stringify({
   .details-content p {
     font-size: 0.85rem;
     line-height: 1.7;
+  }
+
+  /* Fit Guide */
+  .fit-guide {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .fit-row {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .fit-row:last-child { border-bottom: none; }
+
+  .fit-row__label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .fit-row__icon {
+    font-size: 0.85rem;
+  }
+
+  .fit-row__name {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-black);
+  }
+
+  .fit-row__value {
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    margin: 0;
+    padding-left: 1.35rem;
+  }
+
+  /* ---- Reviews Section ---- */
+  .reviews-section {
+    background: var(--color-white);
+    padding-bottom: 4rem;
+  }
+
+  .reviews-overview {
+    margin-top: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .reviews-summary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+  }
+
+  .reviews-summary__score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .reviews-summary__number {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--color-black);
+    line-height: 1;
+  }
+
+  .reviews-summary__stars {
+    display: flex;
+    gap: 0.15rem;
+  }
+
+  .star {
+    font-size: 1rem;
+    color: #ddd;
+  }
+
+  .star--filled {
+    color: var(--color-gold);
+  }
+
+  .reviews-summary__count {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    margin-top: 0.2rem;
+  }
+
+  .reviews-summary__bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .rating-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+  }
+
+  .rating-bar__label {
+    width: 50px;
+    flex-shrink: 0;
+  }
+
+  .rating-bar__track {
+    flex: 1;
+    height: 6px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .rating-bar__fill {
+    height: 100%;
+    background: var(--color-black);
+    border-radius: 3px;
+    transition: width 0.6s var(--ease-luxury);
+  }
+
+  .rating-bar__count {
+    width: 16px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Fit scale */
+  .reviews-summary__fit {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .reviews-summary__fit-label {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-black);
+  }
+
+  .fit-scale__track {
+    height: 4px;
+    background: #f0f0f0;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .fit-scale__marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-black);
+  }
+
+  .fit-scale__labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    color: var(--color-text-muted);
+    margin-top: 0.25rem;
+  }
+
+  .reviews-summary__basis {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+
+  /* Customer Images */
+  .customer-images {
+    padding: 1.5rem;
+    background: var(--color-bone);
+  }
+
+  .customer-images__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .customer-images__header h3 {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
+
+  .customer-images__count {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .customer-images__grid {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+  }
+
+  .customer-images__grid::-webkit-scrollbar { height: 2px; }
+  .customer-images__grid::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+
+  .customer-images__item {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    overflow: hidden;
+    cursor: pointer;
+    scroll-snap-align: start;
+  }
+
+  .customer-images__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s var(--ease-luxury);
+  }
+
+  .customer-images__item:hover img {
+    transform: scale(1.1);
+  }
+
+  /* Reviews List */
+  .reviews-list {
+    margin-top: 2.5rem;
+  }
+
+  .reviews-list__controls {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0;
+  }
+
+  .reviews-list__sort {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+  }
+
+  .reviews-list__sort strong {
+    color: var(--color-black);
+  }
+
+  .review-card {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .review-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .review-card__stars {
+    display: flex;
+    gap: 0.1rem;
+  }
+
+  .review-card__date {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+  }
+
+  .review-card__title {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-black);
+    margin: 0 0 0.5rem;
+  }
+
+  .review-card__body {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--color-text);
+    margin: 0 0 0.75rem;
+  }
+
+  .review-card__image {
+    width: 80px;
+    height: 100px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  .review-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+    cursor: pointer;
+  }
+
+  .review-card__image img:hover {
+    transform: scale(1.05);
+  }
+
+  .review-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .review-card__name {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-black);
+  }
+
+  .review-card__tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .review-tag {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    color: var(--color-text-muted);
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #eee;
+    border-radius: 2px;
   }
 
   /* Related / Explore Grid */
@@ -540,12 +1104,34 @@ const productData = JSON.stringify({
       grid-template-columns: repeat(4, 1fr);
       gap: 2rem;
     }
+
+    .reviews-overview {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .reviews-summary {
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem 2rem;
+    }
+
+    .reviews-summary__score {
+      grid-row: 1 / 3;
+    }
+
+    .reviews-summary__fit {
+      grid-column: 1 / -1;
+    }
+
+    .customer-images__item {
+      width: 100px;
+      height: 100px;
+    }
   }
 </style>
 
 <script>
-  // Gallery
-  const mainImg = document.getElementById('main-image');
+  // Gallery thumbnail switching
+  const mainImg = document.getElementById('main-image') as HTMLImageElement;
   const thumbs = document.querySelectorAll('.gallery__thumb');
 
   thumbs.forEach(thumb => {
@@ -555,12 +1141,27 @@ const productData = JSON.stringify({
       if (mainImg) {
         mainImg.style.opacity = '0';
         setTimeout(() => {
-          mainImg.src = thumb.dataset.src;
+          mainImg.src = (thumb as HTMLElement).dataset.src!;
           mainImg.style.opacity = '1';
         }, 150);
       }
     });
   });
+
+  // Image zoom on hover — follow mouse
+  const galleryMain = document.getElementById('gallery-zoom-container');
+  if (galleryMain && mainImg) {
+    galleryMain.addEventListener('mousemove', (e: MouseEvent) => {
+      const rect = galleryMain.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      mainImg.style.transformOrigin = `${x}% ${y}%`;
+    });
+
+    galleryMain.addEventListener('mouseleave', () => {
+      mainImg.style.transformOrigin = 'center center';
+    });
+  }
 
   // Color swatches
   const swatches = document.querySelectorAll('.swatch');
@@ -570,7 +1171,7 @@ const productData = JSON.stringify({
     s.addEventListener('click', () => {
       swatches.forEach(sw => sw.classList.remove('is-active'));
       s.classList.add('is-active');
-      if (colorName) colorName.textContent = s.dataset.color;
+      if (colorName) colorName.textContent = (s as HTMLElement).dataset.color!;
     });
   });
 
@@ -586,13 +1187,13 @@ const productData = JSON.stringify({
   // Add to Bag
   document.querySelectorAll('.add-to-bag-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const product = JSON.parse(btn.dataset.product);
-      const activeColor = document.querySelector('.swatch.is-active');
-      const activeSize = document.querySelector('.size-btn.is-active');
+      const product = JSON.parse((btn as HTMLElement).dataset.product!);
+      const activeColor = document.querySelector('.swatch.is-active') as HTMLElement;
+      const activeSize = document.querySelector('.size-btn.is-active') as HTMLElement;
       if (activeColor) product.color = activeColor.dataset.color;
       if (activeSize) product.size = activeSize.dataset.size;
       product.id = `${product.id}-${product.color || 'default'}-${product.size || 'default'}`;
-      if (window.addToCart) window.addToCart(product);
+      if ((window as any).addToCart) (window as any).addToCart(product);
     });
   });
 </script>
