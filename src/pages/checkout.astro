@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9SqxLocrw8O0IkeBCtWHJ1G2BhXd70ksVWm1rBqsgVA0qihA00zZ9muxv9';
 ---
 
 <BaseLayout title="Checkout — Styled by Maryam" description="Complete your order">
@@ -132,9 +133,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </div>
           </fieldset>
 
+          <!-- Payment — Stripe Elements -->
+          <fieldset class="form-section">
+            <legend>Payment</legend>
+            <div class="payment-card-wrapper">
+              <div class="card-icons">
+                <svg viewBox="0 0 38 24" class="card-icon"><rect width="38" height="24" rx="3" fill="#1A1F71"/><path d="M15.6 16.8h-2.5L14.8 7.2h2.5L15.6 16.8z" fill="#fff"/><path d="M24.3 7.5c-.5-.2-1.3-.4-2.2-.4-2.5 0-4.2 1.3-4.2 3.2 0 1.4 1.2 2.2 2.2 2.6 1 .5 1.3.8 1.3 1.2 0 .6-.8 1-1.5 1-.9 0-1.5-.1-2.2-.5l-.3-.2-.3 2c.6.3 1.6.5 2.7.5 2.6 0 4.3-1.3 4.3-3.3 0-1.1-.7-1.9-2.1-2.6-.9-.4-1.4-.7-1.4-1.2 0-.4.5-.8 1.4-.8.8 0 1.4.2 1.9.4l.2.1.3-1.9z" fill="#fff"/><path d="M28 7.2h-1.9c-.6 0-1 .2-1.3.8l-3.6 8.8h2.6l.5-1.4h3.1l.3 1.4h2.3L28 7.2zm-2.8 6.2l1-2.8.5 2.8h-1.5z" fill="#fff"/><path d="M12.6 7.2L10.1 13.6 9.8 12c-.5-1.7-2.1-3.6-3.9-4.5l2.2 9.2h2.6l3.9-9.5h-2z" fill="#fff"/><path d="M7.4 7.2H3.5l0 .2C6.5 8.1 8.5 10 9.2 12.3l-.9-4.3c-.1-.6-.6-.8-1-.8z" fill="#F9A533"/></svg>
+                <svg viewBox="0 0 38 24" class="card-icon"><rect width="38" height="24" rx="3" fill="#fff" stroke="#ddd"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 7.3a7 7 0 010 9.4 7 7 0 000-9.4z" fill="#FF5F00"/></svg>
+                <svg viewBox="0 0 38 24" class="card-icon"><rect width="38" height="24" rx="3" fill="#006FCF"/><path d="M7 12.5h2.5L8.3 10 7 12.5zm13-5.3v9.6h2.6l.3-1h2.5l.3 1H28l-2.3-9.6h-2.3c-.5 0-.9.3-1 .7l-3.3 8.9V7.2h-3.4l-1.6 4-1.6-4H9l0 9.6h1.9V9.4l1.8 7.4h1.4l1.8-7.4v7.4h4.3l.4-1h3l.4 1h2.2V7.2H20z" fill="#fff"/></svg>
+              </div>
+              <div id="card-element" class="stripe-card-element"></div>
+              <div id="card-errors" class="card-errors" role="alert"></div>
+            </div>
+          </fieldset>
+
           <button class="btn btn--gold checkout-submit" id="place-order-btn">
-            Place Order
+            <span id="btn-text">Pay Now</span>
+            <span id="btn-spinner" class="btn-spinner" style="display:none;">
+              <svg class="spinner-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" opacity="0.25"/><path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor" opacity="0.75"/></svg>
+              Processing...
+            </span>
           </button>
+
+          <p class="secure-note">
+            <svg width="12" height="14" viewBox="0 0 12 14" fill="none"><path d="M10 5H9V3.5C9 1.57 7.43 0 5.5 0S2 1.57 2 3.5V5H1C.45 5 0 5.45 0 6v7c0 .55.45 1 1 1h9c.55 0 1-.45 1-1V6c0-.55-.45-1-1-1zM5.5 10.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5S7 8.17 7 9s-.67 1.5-1.5 1.5zM7.5 5h-4V3.5C3.5 2.4 4.4 1.5 5.5 1.5S7.5 2.4 7.5 3.5V5z" fill="#999"/></svg>
+            Payments are secure and encrypted via Stripe
+          </p>
         </div>
 
         <!-- Order Summary Side -->
@@ -164,6 +188,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </section>
 </BaseLayout>
 
+<!-- Stripe.js -->
+<script is:inline src="https://js.stripe.com/v3/"></script>
+
 <style>
   .checkout-page {
     padding-top: 7rem;
@@ -189,7 +216,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     gap: 3rem;
   }
 
-  /* Form */
   .checkout-form h1 {
     font-size: clamp(1.8rem, 3vw, 2.6rem);
     margin-bottom: 2.5rem;
@@ -212,10 +238,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     padding: 0;
   }
 
-  .form-row {
-    margin-bottom: 1.25rem;
-  }
-
+  .form-row { margin-bottom: 1.25rem; }
   .form-row--2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .form-row--3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
 
@@ -246,24 +269,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     cursor: pointer;
   }
 
-  .checkbox-row input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
-    accent-color: var(--color-gold);
-  }
+  .checkbox-row input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--color-gold); }
+  .checkbox-row span { font-family: var(--font-body); font-size: 0.8rem; color: #666; }
 
-  .checkbox-row span {
-    font-family: var(--font-body);
-    font-size: 0.8rem;
-    color: #666;
-  }
-
-  /* Shipping Options */
-  .shipping-options {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
+  .shipping-options { display: flex; flex-direction: column; gap: 0; }
 
   .shipping-option {
     display: flex;
@@ -276,58 +285,46 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .shipping-option:last-child { border-bottom: none; }
+  .shipping-option input[type="radio"] { width: 16px; height: 16px; accent-color: var(--color-gold); flex-shrink: 0; }
+  .shipping-option__info { flex: 1; }
+  .shipping-option__name { font-family: var(--font-body); font-size: 0.8rem; font-weight: 500; color: var(--color-black); display: block; }
+  .shipping-option__time { font-family: var(--font-body); font-size: 0.7rem; color: var(--color-text-muted); }
+  .shipping-option__price { font-family: var(--font-display); font-size: 0.95rem; font-style: italic; font-weight: 300; color: var(--color-black); white-space: nowrap; }
 
-  .shipping-option input[type="radio"] {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--color-gold);
-    flex-shrink: 0;
+  .gift-note-area { margin-top: 1rem; }
+  .gift-note-area textarea { resize: none; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+  /* Payment section */
+  .payment-card-wrapper {
+    background: #fafaf8;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 1.25rem;
   }
 
-  .shipping-option__info {
-    flex: 1;
+  .card-icons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
   }
 
-  .shipping-option__name {
+  .card-icon {
+    width: 38px;
+    height: 24px;
+  }
+
+  .stripe-card-element {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .card-errors {
     font-family: var(--font-body);
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--color-black);
-    display: block;
-  }
-
-  .shipping-option__time {
-    font-family: var(--font-body);
-    font-size: 0.7rem;
-    color: var(--color-text-muted);
-  }
-
-  .shipping-option__price {
-    font-family: var(--font-display);
-    font-size: 0.95rem;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--color-black);
-    white-space: nowrap;
-  }
-
-  .gift-note-area {
-    margin-top: 1rem;
-  }
-
-  .gift-note-area textarea {
-    resize: none;
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    border: 0;
+    font-size: 0.75rem;
+    color: #e25950;
+    margin-top: 0.5rem;
+    min-height: 1.2em;
   }
 
   .checkout-submit {
@@ -335,6 +332,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     text-align: center;
     padding: 1.15rem;
     font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .btn-spinner {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .spinner-svg {
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .secure-note {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    justify-content: center;
+    margin-top: 1rem;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
   }
 
   /* Order Summary */
@@ -346,10 +372,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     top: 5rem;
   }
 
-  .summary-title {
-    font-size: 1.3rem;
-    margin-bottom: 1.5rem;
-  }
+  .summary-title { font-size: 1.3rem; margin-bottom: 1.5rem; }
 
   .summary-items {
     display: flex;
@@ -358,56 +381,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-bottom: 1.5rem;
   }
 
-  .summary-empty {
-    color: var(--color-text-muted);
-    text-align: center;
-    padding: 1.5rem 0;
-  }
+  .summary-empty { color: var(--color-text-muted); text-align: center; padding: 1.5rem 0; }
 
-  .summary-totals {
-    border-top: 0.5px solid var(--color-border);
-    padding-top: 1.25rem;
-  }
+  .summary-totals { border-top: 0.5px solid var(--color-border); padding-top: 1.25rem; }
 
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 0.5rem;
-  }
+  .summary-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
+  .summary-row span:first-child { font-family: var(--font-body); font-size: 0.75rem; color: var(--color-text-muted); }
+  .summary-row span:last-child { font-family: var(--font-body); font-size: 0.85rem; color: var(--color-black); }
 
-  .summary-row span:first-child {
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-  }
-
-  .summary-row span:last-child {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    color: var(--color-black);
-  }
-
-  .summary-row--total {
-    border-top: 0.5px solid var(--color-border);
-    padding-top: 1rem;
-    margin-top: 0.75rem;
-  }
-
-  .summary-row--total span:first-child {
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 0.7rem;
-    color: var(--color-black);
-  }
-
-  .summary-row--total span:last-child {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-style: italic;
-    font-weight: 300;
-  }
+  .summary-row--total { border-top: 0.5px solid var(--color-border); padding-top: 1rem; margin-top: 0.75rem; }
+  .summary-row--total span:first-child { font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem; color: var(--color-black); }
+  .summary-row--total span:last-child { font-family: var(--font-display); font-size: 1.4rem; font-style: italic; font-weight: 300; }
 
   @media (max-width: 639px) {
     .form-row--2 { grid-template-columns: 1fr; }
@@ -416,14 +400,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   @media (min-width: 768px) {
     .checkout-page { padding-top: 9rem; }
-    .checkout-layout {
-      grid-template-columns: 1fr 400px;
-      gap: 4rem;
-    }
+    .checkout-layout { grid-template-columns: 1fr 400px; gap: 4rem; }
   }
 </style>
 
-<script>
+<script is:inline define:vars={{ STRIPE_PUBLIC_KEY }}>
+  // ---- Stripe setup ----
+  const stripeInstance = Stripe(STRIPE_PUBLIC_KEY);
+  const elements = stripeInstance.elements();
+  const cardElement = elements.create('card', {
+    style: {
+      base: {
+        fontFamily: '"Inter", "Helvetica Neue", sans-serif',
+        fontSize: '15px',
+        color: '#1a1a1a',
+        '::placeholder': { color: '#aaa' },
+      },
+      invalid: { color: '#e25950' },
+    },
+  });
+  cardElement.mount('#card-element');
+
+  cardElement.on('change', (event) => {
+    const errEl = document.getElementById('card-errors');
+    errEl.textContent = event.error ? event.error.message : '';
+  });
+
+  // ---- Cart helpers ----
   function getCart() {
     try { return JSON.parse(localStorage.getItem('sbm-cart') || '[]'); }
     catch { return []; }
@@ -445,6 +448,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     return (giftToggle && giftToggle.checked && giftWrap && giftWrap.checked) ? 5 : 0;
   }
 
+  function getTotal() {
+    const cart = getCart();
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const selectedShipping = document.querySelector('input[name="shipping"]:checked');
+    const shippingCost = selectedShipping ? parseInt(selectedShipping.dataset.cost) : 0;
+    return subtotal + shippingCost + getGiftWrapCost();
+  }
+
   function renderSummary() {
     const cart = getCart();
     const itemsEl = document.getElementById('summary-items');
@@ -456,26 +467,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     if (cart.length === 0) {
       itemsEl.innerHTML = '<p class="summary-empty">Your bag is empty.</p>';
       totalsEl.style.display = 'none';
+      updateButtonText();
       return;
     }
 
     totalsEl.style.display = 'block';
 
-    itemsEl.innerHTML = cart.map(item => `
-      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
-        <div style="width:56px;height:70px;background:var(--color-bone);flex-shrink:0;overflow:hidden;position:relative;">
-          ${item.image ? `<img src="${esc(item.image)}" alt="${esc(item.name)}" style="width:100%;height:100%;object-fit:cover;">` : ''}
-          <span style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:var(--color-text-muted);color:#fff;font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-body);">${item.qty}</span>
-        </div>
-        <div style="flex:1;">
-          <p style="font-family:var(--font-body);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;margin:0;color:var(--color-black);">${esc(item.name)}</p>
-          ${item.color ? `<p style="font-size:0.78rem;color:var(--color-text-muted);margin:0.15rem 0 0;">${esc(item.color)}${item.size ? ' / ' + esc(item.size) : ''}</p>` : ''}
-        </div>
-        <span style="font-family:var(--font-display);font-size:1.05rem;font-style:italic;font-weight:300;color:#555;white-space:nowrap;">${formatPrice(item.price * item.qty)}</span>
-      </div>
-    `).join('');
+    itemsEl.innerHTML = cart.map(function(item) { return '<div style="display:flex;gap:0.75rem;align-items:flex-start;">' +
+      '<div style="width:56px;height:70px;background:var(--color-bone);flex-shrink:0;overflow:hidden;position:relative;">' +
+        (item.image ? '<img src="' + esc(item.image) + '" alt="' + esc(item.name) + '" style="width:100%;height:100%;object-fit:cover;">' : '') +
+        '<span style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:var(--color-text-muted);color:#fff;font-size:0.6rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-body);">' + item.qty + '</span>' +
+      '</div>' +
+      '<div style="flex:1;">' +
+        '<p style="font-family:var(--font-body);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;margin:0;color:var(--color-black);">' + esc(item.name) + '</p>' +
+        (item.color ? '<p style="font-size:0.78rem;color:var(--color-text-muted);margin:0.15rem 0 0;">' + esc(item.color) + (item.size ? ' / ' + esc(item.size) : '') + '</p>' : '') +
+      '</div>' +
+      '<span style="font-family:var(--font-display);font-size:1.05rem;font-style:italic;font-weight:300;color:#555;white-space:nowrap;">' + formatPrice(item.price * item.qty) + '</span>' +
+    '</div>'; }).join('');
 
-    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const subtotal = cart.reduce(function(s, i) { return s + i.price * i.qty; }, 0);
     const selectedShipping = document.querySelector('input[name="shipping"]:checked');
     const shippingCost = selectedShipping ? parseInt(selectedShipping.dataset.cost) : 0;
     const giftWrapCost = getGiftWrapCost();
@@ -483,61 +493,70 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     subtotalEl.textContent = formatPrice(subtotal);
     shippingEl.textContent = shippingCost === 0 ? 'Complimentary' : formatPrice(shippingCost);
     totalEl.textContent = formatPrice(subtotal + shippingCost + giftWrapCost);
+    updateButtonText();
   }
 
-  // Shipping selection
-  document.querySelectorAll('input[name="shipping"]').forEach(radio => {
-    radio.addEventListener('change', () => {
-      document.querySelectorAll('.shipping-option').forEach(o => o.classList.remove('is-active'));
+  function updateButtonText() {
+    const btnText = document.getElementById('btn-text');
+    const total = getTotal();
+    if (getCart().length > 0) {
+      btnText.textContent = 'Pay ' + formatPrice(total);
+    } else {
+      btnText.textContent = 'Pay Now';
+    }
+  }
+
+  // ---- Event listeners ----
+  document.querySelectorAll('input[name="shipping"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('.shipping-option').forEach(function(o) { o.classList.remove('is-active'); });
       radio.closest('.shipping-option').classList.add('is-active');
       renderSummary();
     });
   });
 
-  // Gift toggle
-  document.getElementById('checkout-gift-toggle').addEventListener('change', (e) => {
+  document.getElementById('checkout-gift-toggle').addEventListener('change', function(e) {
     document.getElementById('checkout-gift-area').style.display = e.target.checked ? 'block' : 'none';
     renderSummary();
   });
 
-  // Gift wrap checkbox updates total
-  const giftWrapCheck = document.querySelector('#checkout-gift-area input[type="checkbox"]');
+  var giftWrapCheck = document.querySelector('#checkout-gift-area input[type="checkbox"]');
   if (giftWrapCheck) {
     giftWrapCheck.addEventListener('change', renderSummary);
   }
 
-  // Place order — validate and redirect to Stripe
-  const placeOrderBtn = document.getElementById('place-order-btn');
-  let isSubmitting = false;
+  // ---- Place order ----
+  var placeOrderBtn = document.getElementById('place-order-btn');
+  var isSubmitting = false;
 
-  placeOrderBtn.addEventListener('click', async () => {
+  placeOrderBtn.addEventListener('click', async function() {
     if (isSubmitting) return;
 
-    const cart = getCart();
+    var cart = getCart();
     if (cart.length === 0) {
       alert('Your bag is empty. Add some items before checking out.');
       return;
     }
 
-    const email = document.getElementById('email').value.trim();
-    const firstName = document.getElementById('first-name').value.trim();
-    const lastName = document.getElementById('last-name').value.trim();
-    const address = document.getElementById('address').value.trim();
-    const city = document.getElementById('city').value.trim();
-    const postcode = document.getElementById('postcode').value.trim();
-    const country = document.getElementById('country').value;
-    const phone = document.getElementById('phone').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var firstName = document.getElementById('first-name').value.trim();
+    var lastName = document.getElementById('last-name').value.trim();
+    var address = document.getElementById('address').value.trim();
+    var city = document.getElementById('city').value.trim();
+    var postcode = document.getElementById('postcode').value.trim();
+    var country = document.getElementById('country').value;
+    var phone = document.getElementById('phone').value.trim();
 
     if (!email || !firstName || !lastName || !address || !city || !postcode) {
-      alert('Please fill in all required shipping details before placing your order.');
-      const firstEmpty = [
+      alert('Please fill in all required fields.');
+      var firstEmpty = [
         document.getElementById('email'),
         document.getElementById('first-name'),
         document.getElementById('last-name'),
         document.getElementById('address'),
         document.getElementById('city'),
         document.getElementById('postcode'),
-      ].find(el => !el.value.trim());
+      ].find(function(el) { return !el.value.trim(); });
       if (firstEmpty) firstEmpty.focus();
       return;
     }
@@ -548,75 +567,83 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       return;
     }
 
-    // Get shipping info
-    const selectedShipping = document.querySelector('input[name="shipping"]:checked');
-    const shippingCost = selectedShipping ? parseInt(selectedShipping.dataset.cost) : 0;
-    const shippingMethod = selectedShipping ? selectedShipping.value : 'standard';
-    const shippingLabels = { standard: 'Standard', express: 'Express', 'next-day': 'Next Day' };
+    var selectedShipping = document.querySelector('input[name="shipping"]:checked');
+    var shippingCost = selectedShipping ? parseInt(selectedShipping.dataset.cost) : 0;
+    var shippingMethod = selectedShipping ? selectedShipping.value : 'standard';
+    var shippingLabels = { standard: 'Standard', express: 'Express', 'next-day': 'Next Day' };
 
-    // Gift options
-    const giftToggle = document.getElementById('checkout-gift-toggle');
-    const giftWrapEl = document.querySelector('#checkout-gift-area input[type="checkbox"]');
-    const giftNoteEl = document.getElementById('checkout-gift-note');
-    const isGift = giftToggle && giftToggle.checked;
-    const giftWrap = isGift && giftWrapEl && giftWrapEl.checked;
-    const giftNote = isGift && giftNoteEl ? giftNoteEl.value.trim() : '';
+    var giftToggle = document.getElementById('checkout-gift-toggle');
+    var giftWrapEl = document.querySelector('#checkout-gift-area input[type="checkbox"]');
+    var giftNoteEl = document.getElementById('checkout-gift-note');
+    var isGift = giftToggle && giftToggle.checked;
+    var giftWrap = isGift && giftWrapEl && giftWrapEl.checked;
+    var giftNote = isGift && giftNoteEl ? giftNoteEl.value.trim() : '';
 
-    // Show loading state
+    // Show loading
     isSubmitting = true;
-    placeOrderBtn.textContent = 'Redirecting to payment...';
-    placeOrderBtn.style.opacity = '0.6';
-    placeOrderBtn.style.pointerEvents = 'none';
+    document.getElementById('btn-text').style.display = 'none';
+    document.getElementById('btn-spinner').style.display = 'flex';
+    placeOrderBtn.disabled = true;
 
     try {
-      const res = await fetch('https://authentifactor.com/api/storefront/checkout?tenant=styled-by-maryam', {
+      // Step 1: Create PaymentIntent via API
+      var res = await fetch('https://authentifactor.com/api/storefront/checkout?tenant=styled-by-maryam', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          items: cart.map(item => ({
-            name: item.name,
-            price: item.price,
-            qty: item.qty,
-            image: item.image,
-            variant: [item.color, item.size].filter(Boolean).join(' / ') || undefined,
-          })),
-          customer: {
-            email,
-            firstName,
-            lastName,
-            address,
-            city,
-            postcode,
-            country,
-            phone,
-          },
-          shipping: {
-            method: shippingLabels[shippingMethod] || shippingMethod,
-            cost: shippingCost,
-          },
-          giftWrap,
-          giftNote,
-          successUrl: window.location.origin + '/checkout/success',
-          cancelUrl: window.location.origin + '/checkout',
+          items: cart.map(function(item) {
+            return {
+              name: item.name,
+              price: item.price,
+              qty: item.qty,
+              image: item.image,
+              variant: [item.color, item.size].filter(Boolean).join(' / ') || undefined,
+            };
+          }),
+          customer: { email: email, firstName: firstName, lastName: lastName, address: address, city: city, postcode: postcode, country: country, phone: phone },
+          shipping: { method: shippingLabels[shippingMethod] || shippingMethod, cost: shippingCost },
+          giftWrap: giftWrap,
+          giftNote: giftNote,
         }),
       });
 
-      const data = await res.json();
+      var data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Payment setup failed');
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Checkout failed');
+      // Step 2: Confirm payment with Stripe.js
+      var result = await stripeInstance.confirmCardPayment(data.clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: firstName + ' ' + lastName,
+            email: email,
+            phone: phone || undefined,
+            address: {
+              line1: address,
+              city: city,
+              postal_code: postcode,
+              country: country !== 'OTHER' ? country : undefined,
+            },
+          },
+        },
+      });
+
+      if (result.error) {
+        document.getElementById('card-errors').textContent = result.error.message;
+        throw new Error(result.error.message);
       }
 
-      // Clear cart and redirect to Stripe
+      // Payment succeeded
       localStorage.removeItem('sbm-cart');
       document.dispatchEvent(new CustomEvent('cart-updated', { detail: { items: [] } }));
-      window.location.href = data.url;
+      window.location.href = '/checkout/success';
+
     } catch (err) {
-      alert('Something went wrong: ' + (err.message || 'Please try again.'));
+      document.getElementById('card-errors').textContent = err.message || 'Payment failed. Please try again.';
       isSubmitting = false;
-      placeOrderBtn.textContent = 'Place Order';
-      placeOrderBtn.style.opacity = '1';
-      placeOrderBtn.style.pointerEvents = 'auto';
+      document.getElementById('btn-text').style.display = 'inline';
+      document.getElementById('btn-spinner').style.display = 'none';
+      placeOrderBtn.disabled = false;
     }
   });
 
