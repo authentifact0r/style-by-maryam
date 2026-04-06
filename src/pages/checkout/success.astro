@@ -17,13 +17,38 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <h1>Thank You for Your Order</h1>
         <p class="success-sub">Your payment has been processed successfully.</p>
 
-        <div class="order-details" id="order-details">
-          <p class="order-note">A confirmation email has been sent to your inbox with your order details and tracking information.</p>
+        <div class="order-details">
+          <p class="order-note">A confirmation email will be sent to your inbox with your order details and tracking information.</p>
         </div>
 
         <div class="success-actions">
           <a href="/shop" class="btn btn--filled">Continue Shopping</a>
           <a href="/" class="btn">Return Home</a>
+        </div>
+
+        <!-- Account Creation CTA -->
+        <div class="account-cta">
+          <div class="account-cta__inner">
+            <div class="account-cta__icon">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <circle cx="16" cy="12" r="5" stroke="#C5A059" stroke-width="1.5"/>
+                <path d="M6 28c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#C5A059" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Create Your Account</h3>
+            <p>Track your order, manage your addresses, get early access to new collections, and receive exclusive promotions.</p>
+            <div class="account-cta__benefits">
+              <span>Order tracking</span>
+              <span class="dot"></span>
+              <span>Exclusive offers</span>
+              <span class="dot"></span>
+              <span>Early access</span>
+              <span class="dot"></span>
+              <span>Saved addresses</span>
+            </div>
+            <a href="https://admin.styledbymaryam.com/register" class="btn btn--gold account-cta__btn">Create My Account</a>
+            <p class="account-cta__login">Already have an account? <a href="https://admin.styledbymaryam.com/login">Sign in</a></p>
+          </div>
         </div>
 
         <div class="success-help">
@@ -44,14 +69,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   }
 
   .success-card {
-    max-width: 560px;
+    max-width: 580px;
     margin: 0 auto;
     text-align: center;
   }
 
-  .success-icon {
-    margin-bottom: 2rem;
-  }
+  .success-icon { margin-bottom: 2rem; }
 
   .success-card h1 {
     font-size: clamp(1.6rem, 3vw, 2.2rem);
@@ -68,7 +91,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .order-details {
     background: var(--color-bone);
     padding: 1.5rem 2rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     text-align: left;
   }
 
@@ -93,6 +116,76 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     padding: 0.9rem 2rem;
   }
 
+  /* Account CTA */
+  .account-cta {
+    margin-bottom: 2.5rem;
+  }
+
+  .account-cta__inner {
+    border: 1px solid var(--color-gold);
+    padding: 2.5rem 2rem;
+    background: linear-gradient(180deg, rgba(197, 160, 89, 0.04) 0%, rgba(197, 160, 89, 0.01) 100%);
+  }
+
+  .account-cta__icon { margin-bottom: 1rem; }
+
+  .account-cta h3 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--color-black);
+    margin: 0 0 0.75rem;
+  }
+
+  .account-cta p {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    margin: 0 0 1.25rem;
+  }
+
+  .account-cta__benefits {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-gold);
+  }
+
+  .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    display: inline-block;
+  }
+
+  .account-cta__btn {
+    display: inline-block;
+    padding: 0.85rem 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .account-cta__login {
+    font-size: 0.72rem !important;
+    color: var(--color-text-muted) !important;
+    margin: 0 !important;
+  }
+
+  .account-cta__login a {
+    color: var(--color-gold);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
   .success-help {
     border-top: 0.5px solid var(--color-border);
     padding-top: 1.5rem;
@@ -112,7 +205,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 </style>
 
 <script>
-  // Clear cart on success page load (in case redirect didn't clear it)
   localStorage.removeItem('sbm-cart');
   document.dispatchEvent(new CustomEvent('cart-updated', { detail: { items: [] } }));
 </script>
