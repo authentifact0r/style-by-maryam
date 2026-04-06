@@ -1,14 +1,12 @@
 ---
 name: "The \"Soleil\" Sculptural Tulip Mini Dress"
-price: 63
+price: 80
 description: "Effortless sophistication meets modern tailoring — a masterpiece of feminine draping in Radiant Lemon Sorbet."
-image: "/uploads/1775476227132-twhbcb.png"
+image: "/uploads/soleil-front.png"
 images:
-  - "/uploads/1775476227132-twhbcb.png"
-  - "/uploads/1775476250262-3mx0oi.png"
-  - "/uploads/1775476360282-qdlff6.png"
-  - "https://sc04.alicdn.com/kf/H8142cf93517d4b249fc5b622ae2786e5N.jpg"
-  - "/uploads/1775476294125-qcvlzm.png"
+  - "/uploads/soleil-front.png"
+  - "/uploads/soleil-side.png"
+  - "/uploads/soleil-back.png"
 category: "evening"
 colors:
   - { name: "Lemon Sorbet", hex: "#FFF44F" }
