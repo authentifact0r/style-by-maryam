@@ -53,12 +53,12 @@ const productData = JSON.stringify({
 const isSoleil = product.id.includes('soleil');
 const isDress = product.data.category === 'evening';
 const fitDetails = isDress ? [
-  { label: 'Bust', icon: '👗', value: isSoleil ? 'Great for any cup size.' : 'Standard fit through bust.' },
-  { label: 'Waist', icon: '📐', value: isSoleil ? 'Fitted — very fitted at natural waist.' : 'Fitted at natural waist.' },
-  { label: 'Hip', icon: '✨', value: isSoleil ? 'Loosely fitted.' : 'Relaxed through hip.' },
-  { label: 'Undergarments', icon: '🩱', value: isSoleil ? 'May be worn with a strapless bra, adhesive bra, petals, or no bra.' : 'Standard undergarments recommended.' },
-  { label: 'Fabric', icon: '🧵', value: isSoleil ? 'Fabric has no stretch.' : 'Minimal stretch.' },
-  { label: 'Length', icon: '📏', value: isSoleil ? 'Mid-thigh. Size M measures approximately 35" from shoulder to hem.' : 'Standard length for category.' },
+  { label: 'Bust', value: isSoleil ? 'Great for any cup size.' : 'Standard fit through bust.' },
+  { label: 'Waist', value: isSoleil ? 'Fitted — very fitted at natural waist.' : 'Fitted at natural waist.' },
+  { label: 'Hip', value: isSoleil ? 'Loosely fitted.' : 'Relaxed through hip.' },
+  { label: 'Undergarments', value: isSoleil ? 'May be worn with a strapless bra, adhesive bra, petals, or no bra.' : 'Standard undergarments recommended.' },
+  { label: 'Fabric', value: isSoleil ? 'Fabric has no stretch.' : 'Minimal stretch.' },
+  { label: 'Length', value: isSoleil ? 'Mid-thigh. Size M measures approximately 35" from shoulder to hem.' : 'Standard length for category.' },
 ] : null;
 
 // Sample reviews data
@@ -227,7 +227,6 @@ const ratingCounts = [5,4,3,2,1].map(n => ({ stars: n, count: reviews.filter(r =
                   {fitDetails.map(fd => (
                     <div class="fit-row">
                       <div class="fit-row__label">
-                        <span class="fit-row__icon">{fd.icon}</span>
                         <span class="fit-row__name">{fd.label}</span>
                       </div>
                       <p class="fit-row__value">{fd.value}</p>
@@ -682,12 +681,7 @@ const ratingCounts = [5,4,3,2,1].map(n => ({ stars: n, count: reviews.filter(r =
   .fit-row__label {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     margin-bottom: 0.3rem;
-  }
-
-  .fit-row__icon {
-    font-size: 0.85rem;
   }
 
   .fit-row__name {
@@ -704,7 +698,7 @@ const ratingCounts = [5,4,3,2,1].map(n => ({ stars: n, count: reviews.filter(r =
     line-height: 1.5;
     color: var(--color-text-muted);
     margin: 0;
-    padding-left: 1.35rem;
+    padding-left: 0;
   }
 
   /* ---- Reviews Section ---- */
