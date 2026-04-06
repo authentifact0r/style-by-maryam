@@ -1,8 +1,8 @@
 {
   "redirects": [
-    { "source": "/admin", "destination": "https://authentifactor.com/admin?tenant=styled-by-maryam", "permanent": false },
-    { "source": "/admin/:path*", "destination": "https://authentifactor.com/admin/:path*?tenant=styled-by-maryam", "permanent": false },
-    { "source": "/login", "destination": "https://authentifactor.com/login?tenant=styled-by-maryam", "permanent": false }
+    { "source": "/admin", "destination": "https://admin.styledbymaryam.com/admin", "permanent": false },
+    { "source": "/admin/:path*", "destination": "https://admin.styledbymaryam.com/admin/:path*", "permanent": false },
+    { "source": "/login", "destination": "https://admin.styledbymaryam.com/login", "permanent": false }
   ],
   "headers": [
     {
