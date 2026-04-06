@@ -224,8 +224,8 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
   </section>
 </BaseLayout>
 
-<!-- Stripe.js -->
-<script is:inline src="https://js.stripe.com/v3/"></script>
+<!-- Stripe.js loaded before main script -->
+<script src="https://js.stripe.com/v3/"></script>
 
 <style>
   .checkout-page {
@@ -510,34 +510,50 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
 </style>
 
 <script is:inline define:vars={{ STRIPE_PUBLIC_KEY }}>
-  // ---- Stripe setup (individual elements) ----
-  var stripeInstance = Stripe(STRIPE_PUBLIC_KEY);
-  var elements = stripeInstance.elements();
+  // Wait for Stripe.js to be available
+  function initCheckout() {
+    if (typeof Stripe === 'undefined') {
+      setTimeout(initCheckout, 100);
+      return;
+    }
+    setupCheckout();
+  }
 
-  var elementStyle = {
-    base: {
-      fontFamily: '"Inter", "Helvetica Neue", sans-serif',
-      fontSize: '15px',
-      color: '#1a1a1a',
-      '::placeholder': { color: '#bbb' },
-    },
-    invalid: { color: '#e25950' },
-  };
+  var stripeInstance, cardNumberElement, cardExpiryElement, cardCvcElement;
 
-  var cardNumberElement = elements.create('cardNumber', { style: elementStyle, placeholder: '0000 0000 0000 0000' });
-  var cardExpiryElement = elements.create('cardExpiry', { style: elementStyle, placeholder: 'MM / YY' });
-  var cardCvcElement = elements.create('cardCvc', { style: elementStyle, placeholder: 'CVV' });
+  function setupCheckout() {
+    // ---- Stripe setup (individual elements) ----
+    stripeInstance = Stripe(STRIPE_PUBLIC_KEY);
+    var elements = stripeInstance.elements();
 
-  cardNumberElement.mount('#stripe-card-number');
-  cardExpiryElement.mount('#stripe-card-expiry');
-  cardCvcElement.mount('#stripe-card-cvc');
+    var elementStyle = {
+      base: {
+        fontFamily: '"Inter", "Helvetica Neue", sans-serif',
+        fontSize: '15px',
+        color: '#1a1a1a',
+        lineHeight: '20px',
+        '::placeholder': { color: '#bbb' },
+      },
+      invalid: { color: '#e25950' },
+    };
 
-  [cardNumberElement, cardExpiryElement, cardCvcElement].forEach(function(el) {
-    el.on('change', function(event) {
-      var errEl = document.getElementById('card-errors');
-      errEl.textContent = event.error ? event.error.message : '';
+    cardNumberElement = elements.create('cardNumber', { style: elementStyle, placeholder: '0000 0000 0000 0000', showIcon: true });
+    cardExpiryElement = elements.create('cardExpiry', { style: elementStyle, placeholder: 'MM / YY' });
+    cardCvcElement = elements.create('cardCvc', { style: elementStyle, placeholder: 'CVV' });
+
+    cardNumberElement.mount('#stripe-card-number');
+    cardExpiryElement.mount('#stripe-card-expiry');
+    cardCvcElement.mount('#stripe-card-cvc');
+
+    [cardNumberElement, cardExpiryElement, cardCvcElement].forEach(function(el) {
+      el.on('change', function(event) {
+        var errEl = document.getElementById('card-errors');
+        errEl.textContent = event.error ? event.error.message : '';
+      });
     });
-  });
+
+    setupEventListeners();
+  }
 
   // ---- Cart helpers ----
   function getCart() {
@@ -619,6 +635,7 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
     }
   }
 
+  function setupEventListeners() {
   // ---- Event listeners ----
   document.querySelectorAll('input[name="shipping"]').forEach(function(radio) {
     radio.addEventListener('change', function() {
@@ -761,4 +778,9 @@ const STRIPE_PUBLIC_KEY = 'pk_live_51S7Hts0UXmT8UaSaFEi50aKkqdvaJN5YubNlQJZg9Sqx
   });
 
   renderSummary();
+  } // end setupEventListeners
+
+  // Cart helpers and renderSummary are available globally,
+  // but event listeners and Stripe need to wait
+  initCheckout();
 </script>
